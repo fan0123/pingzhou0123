@@ -21,15 +21,15 @@
         .plan-header .tagline { opacity: 0.95; font-size: 1.2em; }
         .plan-body { padding: 40px; }
         .highlight-box { background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 100%); border-left: 4px solid #667eea; padding: 25px; margin-bottom: 30px; border-radius: 0 10px 10px 0; }
-        .timeline { position: relative; padding-left: 40px; }
-        .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #667eea, #764ba2); border-radius: 3px; }
-        .timeline-item { position: relative; margin-bottom: 35px; background: #f8f9ff; padding: 25px; border-radius: 15px; }
-        .timeline-item::before { content: ''; position: absolute; left: -32px; top: 25px; width: 18px; height: 18px; background: #667eea; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 3px #667eea; }
-        .timeline-item .time { color: #667eea; font-weight: bold; margin-bottom: 12px; font-size: 1.1em; }
-        .timeline-item .title { font-size: 1.4em; font-weight: bold; margin-bottom: 15px; color: #333; }
+        .section-item { background: #f8f9ff; padding: 30px; border-radius: 15px; margin-bottom: 30px; }
+        .section-item .time { color: #667eea; font-weight: bold; margin-bottom: 12px; font-size: 1.1em; }
+        .section-item .title { font-size: 1.4em; font-weight: bold; margin-bottom: 15px; color: #333; }
         .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 25px 0; }
         .image-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 15px; transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .image-grid img:hover { transform: scale(1.05); }
+        .museum-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 25px 0; }
+        .museum-gallery img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; transition: transform 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .museum-gallery img:hover { transform: scale(1.03); }
         .info-box { background: #f8f9ff; border-radius: 12px; padding: 25px; margin: 20px 0; }
         .info-box h4 { color: #667eea; margin-bottom: 15px; font-size: 1.2em; }
         .restaurant-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.1); }
@@ -49,7 +49,11 @@
         .feature-tag { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border-radius: 25px; font-size: 1em; }
         .footer { text-align: center; padding: 50px 20px; color: white; opacity: 0.95; }
         .footer p { margin: 8px 0; }
-        @media (max-width: 768px) { .hero h1 { font-size: 2em; } .plan-header h2 { font-size: 1.6em; } .timeline { padding-left: 30px; } .image-grid { grid-template-columns: 1fr; } }
+        .highlight-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: bold; }
+        .recommend-card { background: white; border-radius: 15px; padding: 20px; margin: 15px 0; box-shadow: 0 3px 15px rgba(0,0,0,0.08); border-left: 4px solid #667eea; }
+        .recommend-card h5 { color: #667eea; margin-bottom: 10px; font-size: 1.1em; }
+        .time-highlight { display: inline-block; background: #667eea; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.9em; margin-left: 8px; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2em; } .plan-header h2 { font-size: 1.6em; } .image-grid, .museum-gallery { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -78,164 +82,288 @@
                 <div class="tagline">看展拍照 + 美食暖胃 + 电影娱乐，雨天完美组合！</div>
                 <div class="feature-list">
                     <span class="feature-tag">💎 深圳珠宝博物馆</span>
-                    <span class="feature-tag">🍲 潮汕牛肉火锅</span>
-                    <span class="feature-tag">🎬 电影《飞驰人生》</span>
+                    <span class="feature-tag">🍲 特色火锅晚餐</span>
+                    <span class="feature-tag">🎬 《飞驰人生3》</span>
                 </div>
             </div>
             <div class="plan-body">
                 <div class="highlight-box">
-                    <p style="font-size: 1.1em;"><strong>行程安排：</strong>深圳珠宝博物馆看展（2-3小时）→ 潮汕牛肉火锅晚餐 → 看《飞驰人生》电影</p>
+                    <p style="font-size: 1.1em;"><strong>行程安排：</strong>深圳珠宝博物馆看展（2-3小时）→ 特色火锅晚餐 → 看《飞驰人生3》电影</p>
                     <p style="margin-top: 12px; font-size: 1.1em;"><strong>推荐理由：</strong>国内首家珠宝专题公共博物馆，看展拍照超美！水贝商圈逛黄金珠宝市场，再吃一顿热腾腾的火锅，最后看场电影，完美雨天组合。</p>
                     <p style="margin-top: 12px;"><span class="badge badge-indoor">✓ 全程室内，雨天无影响</span></p>
                 </div>
 
-                <div class="image-grid">
-                    <img src="https://s.coze.cn/image/MHxATSA7svQ/" alt="深圳珠宝博物馆">
-                    <img src="https://s.coze.cn/image/Ruld2lgOCmk/" alt="潮汕牛肉火锅">
-                    <img src="https://s.coze.cn/image/ff03HzqemEk/" alt="电影《飞驰人生》">
-                </div>
-
                 <h3 style="color: #667eea; margin: 35px 0 20px; font-size: 1.5em;">📍 行程详拆</h3>
 
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="time">11:00-14:00 | 深圳珠宝博物馆</div>
-                        <div class="title">💎 看展拍照 · 国内首家珠宝专题公共博物馆</div>
-                        
-                        <div class="info-box">
-                            <h4>📍 地点信息</h4>
-                            <p><strong>深圳珠宝博物馆</strong></p>
-                            <p><strong>地址：</strong>深圳市罗湖区水贝一路金展珠宝广场3-4楼</p>
-                            <p><strong>开放时间：</strong>周二至周日 10:00-17:00（16:30停止入馆），周一闭馆</p>
-                            <p><strong>门票：</strong>免费，需提前预约</p>
-                            <p><strong>预约方式：</strong>微信搜索"深圳珠宝博物馆"公众号或小程序"宝博票务"预约</p>
-                        </div>
-
-                        <div class="info-box">
-                            <h4>🎨 五大常设展区（3楼）</h4>
-                            <table class="restaurant-table">
-                                <thead><tr><th>展区名称</th><th>内容介绍</th></tr></thead>
-                                <tbody>
-                                    <tr><td><strong>自然之宝</strong></td><td>天然宝石原石、矿物晶体，像走进地质博物馆</td></tr>
-                                    <tr><td><strong>物佩之美</strong></td><td>古今中外珠宝首饰，展示花丝镶嵌、錾刻、珐琅等传统工艺</td></tr>
-                                    <tr><td><strong>设计之光</strong></td><td>现代珠宝设计师的创意作品，面积最大、最丰富</td></tr>
-                                    <tr><td><strong>深圳之路</strong></td><td>深圳珠宝产业发展历程</td></tr>
-                                    <tr><td><strong>湾区之梦</strong></td><td>粤港澳大湾区珠宝行业愿景</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="info-box">
-                            <h4>✨ 特色体验</h4>
-                            <p><strong>• 生辰石测试：</strong>输入生日可查询属于自己的"生辰石"</p>
-                            <p><strong>• 虚拟试戴：</strong>互动屏前可"试戴"亿元翡翠项链等名贵珠宝，拍照打卡很有趣</p>
-                            <p><strong>• 银饰DIY：</strong>工坊区有时会有银饰DIY课程，可亲手制作戒指（需额外付费预约）</p>
-                        </div>
-
-                        <div class="tips-box">
-                            <h4>💡 参观Tips</h4>
-                            <p>• 允许用手机拍照，但<strong>严禁使用闪光灯</strong></p>
-                            <p>• 专业相机（微单/单反）不允许带入馆内，需在入口处寄存</p>
-                            <p>• 饮料和食物不能带入馆内，入口处有免费寄存柜</p>
-                            <p>• 馆内空调温度较低，建议带一件薄外套或披肩</p>
-                            <p>• 参观时长约1.5-2小时，加上拍照建议预留2-3小时</p>
-                        </div>
-
-                        <div class="tips-box">
-                            <h4>🛍️ 周边逛逛：水贝珠宝市场</h4>
-                            <p>博物馆所在的<strong>金展珠宝广场负一楼</strong>及周边街道，全是珠宝零售和批发店。</p>
-                            <p>可以淘到各种小巧精致的银饰、珍珠、水晶，价格很亲民，体验"买黄金像买白菜"的独特氛围！</p>
-                        </div>
+                <!-- 第一站：珠宝博物馆 -->
+                <div class="section-item">
+                    <div class="time">11:00-14:00 | 深圳珠宝博物馆 <span class="time-highlight">约3小时</span></div>
+                    <div class="title">💎 看展拍照 · 国内首家珠宝专题公共博物馆</div>
+                    
+                    <div class="museum-gallery">
+                        <img src="https://www.coze.cn/s/Ab1I4IHiQpM/?width_height=1080x1440" alt="深圳珠宝博物馆入口">
+                        <img src="https://www.coze.cn/s/AvK8VFK6o6s/?width_height=1080x1440" alt="嵌宝白玉盖炉">
+                        <img src="https://www.coze.cn/s/BBrRNJisXJo/?width_height=1080x1440" alt="水晶内画吊瓶">
+                        <img src="https://www.coze.cn/s/Bte27lQXcxY/?width_height=1080x1440" alt="博物馆展品">
+                        <img src="https://www.coze.cn/s/CDAYGOr1lf4/?width_height=1080x1440" alt="珠宝展览">
+                        <img src="https://www.coze.cn/s/CW1OV1uStuM/?width_height=1080x1440" alt="馆藏精品">
+                        <img src="https://www.coze.cn/s/CqCawhOHNUY/?width_height=1080x1440" alt="矿物标本">
+                        <img src="https://www.coze.cn/s/Ba7GUsQjf8M/?width_height=1440x1080" alt="天安门微缩模型">
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>📍 地点信息</h4>
+                        <p><strong>深圳珠宝博物馆</strong></p>
+                        <p><strong>地址：</strong>深圳市罗湖区水贝一路金展珠宝广场3-4楼</p>
+                        <p><strong>开放时间：</strong>周二至周日 10:00-17:00（16:30停止入馆），周一闭馆</p>
+                        <p><strong>门票：</strong>免费，需提前预约</p>
+                        <p><strong>预约方式：</strong>微信搜索"深圳珠宝博物馆"公众号或小程序"宝博票务"预约</p>
+                        <p><strong>电话：</strong>0755-82235656</p>
                     </div>
 
-                    <div class="timeline-item">
-                        <div class="time">14:30-16:00 | 返回坪洲</div>
-                        <div class="title">🚇 地铁返程 · 休息片刻</div>
-                        <div class="info-box">
-                            <h4>📍 交通路线</h4>
-                            <p><strong>深圳珠宝博物馆 → 坪洲</strong></p>
-                            <p>地铁3/7号线（田贝站）→ 1号线（坪洲站）</p>
-                            <p>约50-60分钟，建议预留1小时通勤时间</p>
-                        </div>
-                        <div class="tips-box">
-                            <h4>💡 休息建议</h4>
-                            <p>回到住处休息片刻，整理照片，准备晚上吃火锅看电影的美好时光～</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <div class="time">17:30-19:00 | 晚餐</div>
-                        <div class="title">🍲 潮汕牛肉火锅 · 热腾腾暖胃</div>
-                        
+                    <div class="info-box">
+                        <h4>🎨 五大常设展区（3楼）</h4>
                         <table class="restaurant-table">
-                            <thead><tr><th>餐厅名称</th><th>菜系</th><th>地址</th><th>人均</th></tr></thead>
+                            <thead><tr><th>展区名称</th><th>内容介绍</th><th>推荐看点</th></tr></thead>
                             <tbody>
-                                <tr>
-                                    <td><strong>潮味壹品汕头牛肉火锅</strong></td>
-                                    <td>潮汕牛肉火锅</td>
-                                    <td>西乡街道宝源路1055号前海茶城（距坪洲站C口600米）</td>
-                                    <td>约91元</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>永记鲜切牛肉自助火锅</strong></td>
-                                    <td>潮汕牛肉自助</td>
-                                    <td>永丰社区六区（坪洲站B口步行350米）</td>
-                                    <td>不到100元</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>云山晓渡潮汕牛肉火锅</strong></td>
-                                    <td>潮汕牛肉火锅</td>
-                                    <td>宝安大仟里L4层（坪洲站A口步行390米）</td>
-                                    <td>约100元</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>八合里海记牛肉店</strong></td>
-                                    <td>潮汕牛肉火锅</td>
-                                    <td>深圳多家分店</td>
-                                    <td>约90-120元</td>
-                                </tr>
+                                <tr><td><strong>自然之宝</strong></td><td>天然宝石原石、矿物晶体，像走进地质博物馆</td><td>碧玺、紫水晶、欧泊等珍稀矿物标本</td></tr>
+                                <tr><td><strong>物佩之美</strong></td><td>古今中外珠宝首饰，展示花丝镶嵌、錾刻、珐琅等传统工艺</td><td>嵌宝白玉盖炉、清代宫廷珠宝</td></tr>
+                                <tr><td><strong>设计之光</strong></td><td>现代珠宝设计师的创意作品，面积最大、最丰富</td><td>大师级珠宝设计作品、当代艺术珠宝</td></tr>
+                                <tr><td><strong>深圳之路</strong></td><td>深圳珠宝产业发展历程</td><td>深圳珠宝产业数字沙盘</td></tr>
+                                <tr><td><strong>湾区之梦</strong></td><td>粤港澳大湾区珠宝行业愿景</td><td>大湾区品牌创新展示</td></tr>
                             </tbody>
                         </table>
-
-                        <div class="tips-box" style="margin-top: 20px;">
-                            <h4>💡 火锅推荐理由</h4>
-                            <p>• <strong>潮味壹品</strong>：坪洲站附近，新鲜现切牛肉，吊龙、三花腱超好吃</p>
-                            <p>• <strong>永记鲜切牛肉自助</strong>：自助火锅性价比高，不到100元吃到饱</p>
-                            <p>• <strong>云山晓渡</strong>：大仟里购物中心内，环境好，逛完街吃火锅</p>
-                            <p style="margin-top: 10px;"><strong>📱 预订方式：</strong>美团/大众点评搜索餐厅名称，建议提前排号</p>
-                        </div>
                     </div>
 
-                    <div class="timeline-item">
-                        <div class="time">19:30-21:30 | 看电影</div>
-                        <div class="title">🎬 《飞驰人生》· 爆笑解压</div>
-                        
-                        <div class="info-box">
-                            <h4>📍 影院推荐</h4>
-                            <p><strong>中影星美国际影城（西乡天虹店）</strong></p>
-                            <p><strong>地址：</strong>宝安区西乡大道与新湖路交汇处宝安天虹购物中心3楼</p>
-                            <p><strong>交通：</strong>地铁1号线西乡站A出口</p>
-                            <p style="margin-top: 15px;"><strong>另一选择：</strong>中影星美国际影城（南山云城店）</p>
-                        </div>
+                    <div class="info-box">
+                        <h4>✨ 特色体验</h4>
+                        <p><strong>• 生辰石测试：</strong>输入生日可查询属于自己的"生辰石"，了解宝石寓意</p>
+                        <p><strong>• 虚拟试戴：</strong>互动屏前可"试戴"亿元翡翠项链等名贵珠宝，拍照打卡很有趣</p>
+                        <p><strong>• 银饰DIY：</strong>工坊区有时会有银饰DIY课程，可亲手制作戒指（需额外付费预约，约100-200元）</p>
+                        <p><strong>• 水晶内画观赏：</strong>欣赏精美的水晶内画吊瓶等工艺品</p>
+                    </div>
 
-                        <div class="info-box">
-                            <h4>🎬 电影信息</h4>
-                            <p><strong>片名：</strong>《飞驰人生》</p>
-                            <p><strong>导演：</strong>韩寒</p>
-                            <p><strong>主演：</strong>沈腾</p>
-                            <p><strong>类型：</strong>喜剧 / 动作</p>
-                            <p><strong>简介：</strong>讲述过气赛车手张驰为了重新回到赛场，经历各种爆笑和热血的故事</p>
-                        </div>
+                    <div class="info-box">
+                        <h4>🏛️ 馆藏精品推荐</h4>
+                        <p><strong>• 嵌宝白玉盖炉：</strong>和田白玉雕琢，炉盖镶嵌绿松石、红珊瑚等宝石，花丝镶嵌工艺精湛</p>
+                        <p><strong>• 水晶内画吊瓶：</strong>瓶腹内绘有精细的孩童图案，配有水晶链架，晶莹剔透</p>
+                        <p><strong>• 天安门金属微缩模型：</strong>以金色金属打造，细节精美，再现天安门庄严形制</p>
+                        <p><strong>• 碧玺标本：</strong>柱状晶体呈现粉橙、翠绿等多色渐变，自然生长纹理清晰</p>
+                        <p><strong>• 紫水晶簇：</strong>深浅不一的紫调晶体，在灯光下折射出迷人光泽</p>
+                    </div>
 
-                        <div class="tips-box">
-                            <h4>💡 观影Tips</h4>
-                            <p>• 建议选择IMAX激光厅，效果更震撼</p>
-                            <p>• 提前10分钟到场，买杯奶茶或爆米花</p>
-                            <p>• <strong>购票链接：</strong><a href="https://www.maoyan.com" target="_blank">猫眼电影</a>或<a href="https://www.taopiaopiao.com" target="_blank">淘票票</a></p>
-                        </div>
+                    <div class="tips-box">
+                        <h4>💡 参观Tips</h4>
+                        <p>• 允许用手机拍照，但<strong>严禁使用闪光灯</strong></p>
+                        <p>• 专业相机（微单/单反）不允许带入馆内，需在入口处寄存</p>
+                        <p>• 饮料和食物不能带入馆内，入口处有免费寄存柜</p>
+                        <p>• 馆内空调温度较低，建议带一件薄外套或披肩</p>
+                        <p>• 参观时长约1.5-2小时，加上拍照建议预留2-3小时</p>
+                        <p>• 展厅内灯光比较昏暗，注意脚下安全</p>
+                        <p>• 建议穿浅色系衣服，与珠宝展品形成优雅对比，拍照更出片</p>
+                    </div>
+
+                    <div class="tips-box">
+                        <h4>🛍️ 周边逛逛：水贝珠宝市场</h4>
+                        <p>博物馆所在的<strong>金展珠宝广场负一楼</strong>及周边街道，全是珠宝零售和批发店。</p>
+                        <p>可以淘到各种小巧精致的银饰、珍珠、水晶，价格很亲民，体验"买黄金像买白菜"的独特氛围！</p>
+                        <p style="margin-top: 10px;"><strong>推荐逛逛：</strong></p>
+                        <p>• 金展珠宝广场负一楼：各类银饰、水晶、珍珠</p>
+                        <p>• 水贝珠宝城：黄金批发市场，价格比零售便宜</p>
+                        <p>• 周边珠宝店铺：可淘到小众设计师作品</p>
                     </div>
                 </div>
 
+                <!-- 第二站：返程休息 -->
+                <div class="section-item">
+                    <div class="time">14:30-16:00 | 返回坪洲 <span class="time-highlight">约1.5小时</span></div>
+                    <div class="title">🚇 地铁返程 · 休息片刻</div>
+                    <div class="info-box">
+                        <h4>📍 交通路线</h4>
+                        <p><strong>深圳珠宝博物馆 → 坪洲</strong></p>
+                        <p>地铁3/7号线（田贝站）→ 老街站换乘1号线 → 坪洲站</p>
+                        <p>约50-60分钟，建议预留1小时通勤时间</p>
+                        <p style="margin-top: 10px;"><strong>详细路线：</strong></p>
+                        <p>1. 从博物馆步行约8分钟到田贝站（地铁3号线/7号线）</p>
+                        <p>2. 乘坐3号线或7号线至老街站</p>
+                        <p>3. 在老街站换乘1号线（往机场东方向）</p>
+                        <p>4. 乘坐至坪洲站下车</p>
+                    </div>
+                    <div class="tips-box">
+                        <h4>💡 休息建议</h4>
+                        <p>回到住处休息片刻，整理照片，准备晚上吃火锅看电影的美好时光～</p>
+                        <p>可以在附近买杯奶茶或咖啡，放松一下下午的时光。</p>
+                    </div>
+                </div>
+
+                <!-- 第三站：火锅晚餐 -->
+                <div class="section-item">
+                    <div class="time">17:00-18:45 | 晚餐 <span class="time-highlight">约1小时45分钟</span></div>
+                    <div class="title">🍲 特色火锅 · 热腾腾暖胃</div>
+                    
+                    <div class="image-grid">
+                        <img src="https://s.coze.cn/image/Ruld2lgOCmk/" alt="潮汕牛肉火锅">
+                        <img src="https://s.coze.cn/image/Vm8iVerJppE/" alt="重庆麻辣火锅">
+                        <img src="https://s.coze.cn/image/ikJlVv54hMg/" alt="川菜火锅">
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🍽️ 坪洲附近火锅推荐（4选1）</h4>
+                    </div>
+
+                    <div class="recommend-card">
+                        <h5>🔥 峰盛牛庄全牛宴潮汕牛肉海鲜自助火锅（西乡店）</h5>
+                        <p><strong>类型：</strong>潮汕牛肉海鲜自助火锅</p>
+                        <p><strong>地址：</strong>深圳市宝安区西乡街道富华社区前进二路丽景城11栋102-6号之1号</p>
+                        <p><strong>人均：</strong>约100-120元/人（自助）</p>
+                        <p><strong>特色：</strong>全牛宴自助！新鲜现切牛肉、海鲜、烧烤一应俱全，可烤肉又可打边炉，供应逾500款美食</p>
+                        <p><strong>推荐菜品：</strong>现切吊龙、手打牛肉丸、鲜虾、高压锅生蚝、澳洲和牛</p>
+                        <p><strong>电话：</strong>17796320183</p>
+                    </div>
+
+                    <div class="recommend-card">
+                        <h5>🌶️ 瓜巷子重庆火锅（翻身店）</h5>
+                        <p><strong>类型：</strong>重庆麻辣火锅</p>
+                        <p><strong>地址：</strong>深圳市宝安区新安街道翻身44区顺丰路43号</p>
+                        <p><strong>人均：</strong>约100-130元/人</p>
+                        <p><strong>特色：</strong>正宗重庆牛油火锅，藤椒牛肉&麻辣牛肉双杀！甜品也很惊艳：花生牛奶冰、芒果冰、草莓雪花冰</p>
+                        <p><strong>推荐菜品：</strong>藤椒牛肉、麻辣牛肉、毛肚、千层肚、花瓣鱿鱼、通心粉</p>
+                    </div>
+
+                    <div class="recommend-card">
+                        <h5>🥩 八合里海记牛肉火锅（宝安大仟里店）</h5>
+                        <p><strong>类型：</strong>潮汕牛肉火锅</p>
+                        <p><strong>地址：</strong>深圳市宝安区宝安大道与海城路交汇处宝安大仟里负一楼B152-153号（地铁1号线坪洲站A出口）</p>
+                        <p><strong>人均：</strong>约100元/人</p>
+                        <p><strong>特色：</strong>深圳必吃榜！汕头非遗牛肉火锅，蝉联8年必吃榜大品牌，新鲜现切牛肉立盘不倒</p>
+                        <p><strong>推荐菜品：</strong>吊龙、五花趾、手打牛肉丸、匙仁肉、胸口油、炒牛河</p>
+                        <p><strong>营业时间：</strong>11:30-22:30</p>
+                        <p><strong>电话：</strong>0755-23001906</p>
+                    </div>
+
+                    <div class="recommend-card">
+                        <h5>🍅 黔酸酸贵州酸汤火锅（裕安二路店）</h5>
+                        <p><strong>类型：</strong>贵州酸汤火锅</p>
+                        <p><strong>地址：</strong>深圳市宝安区新安街道大浪社区27区226号裕安二路228号</p>
+                        <p><strong>人均：</strong>约80-100元/人</p>
+                        <p><strong>特色：</strong>贵州凯里风味红酸汤！以山番茄发酵，酸香浓郁，开胃解腻，涮肉前先喝碗汤</p>
+                        <p><strong>推荐菜品：</strong>鲜切黄牛肉、贵州米粉、折耳根、木姜子油蘸水</p>
+                        <p><strong>电话：</strong>18586396149</p>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 25px;">
+                        <h4>📍 水贝附近火锅推荐（看完展直接吃）</h4>
+                        <p style="margin-bottom: 15px;">如果想在珠宝博物馆附近直接吃火锅，推荐以下几家：</p>
+                        
+                        <div class="recommend-card">
+                            <h5>🥩 八合里牛肉火锅（KKTIME店）</h5>
+                            <p><strong>地址：</strong>深圳市罗湖区翠竹街道水贝社区文锦北路2090号京基水贝城市广场L4-427</p>
+                            <p><strong>人均：</strong>约90-110元/人</p>
+                            <p><strong>特色：</strong>新开分店！汕头非遗牛肉火锅，新鲜现切，头水紫菜牛骨汤必喝</p>
+                            <p><strong>交通：</strong>水贝地铁站步行5分钟</p>
+                        </div>
+
+                        <div class="recommend-card">
+                            <h5>🔥 潮悦牛肉火锅城（水贝店）</h5>
+                            <p><strong>地址：</strong>深圳市罗湖区水贝二路附近</p>
+                            <p><strong>人均：</strong>约100-130元/人</p>
+                            <p><strong>特色：</strong>深圳必吃牛肉火锅天花板！五花金钱展、极美雪花、顶级肥牛，胸口油涮5秒脆到爆</p>
+                            <p><strong>推荐菜品：</strong>五花金钱展、极美雪花、生牛肉丸（会爆汁！）</p>
+                        </div>
+
+                        <div class="recommend-card">
+                            <h5>🥥 润园四季椰子鸡火锅（水贝店）</h5>
+                            <p><strong>地址：</strong>深圳市罗湖区水贝社区文锦北路2090号京基百纳301号</p>
+                            <p><strong>人均：</strong>约120-150元/人</p>
+                            <p><strong>特色：</strong>深圳必吃椰子鸡！青椰清甜+文昌鸡嫩滑，竹笙+珍珠马蹄是灵魂CP</p>
+                            <p><strong>交通：</strong>深圳珠宝博物馆公交站步行3分钟</p>
+                        </div>
+
+                        <div class="recommend-card">
+                            <h5>🥘 乐宴·老北京铜火锅（水贝KKTIME店）</h5>
+                            <p><strong>地址：</strong>深圳市罗湖区水贝二路KKTIME南区L2-221</p>
+                            <p><strong>人均：</strong>约100-130元/人</p>
+                            <p><strong>特色：</strong>老北京铜锅涮肉！秘制麻酱是灵魂，清汤锅底更显羊肉鲜美</p>
+                            <p><strong>推荐菜品：</strong>如意巨无霸羊羔卷、一米板羔羊肉、芝麻烧饼、大羊肉串</p>
+                        </div>
+
+                        <div class="recommend-card">
+                            <h5>🦐 渔民码头·海鲜火锅（田贝店）</h5>
+                            <p><strong>地址：</strong>深圳市罗湖区翠竹街道愉天社区贝丽南路52号-2</p>
+                            <p><strong>人均：</strong>约150-200元/人</p>
+                            <p><strong>特色：</strong>海鲜火锅！新鲜海鲜现捞现煮，适合想吃海鲜的朋友</p>
+                            <p><strong>营业时间：</strong>17:00-22:00</p>
+                            <p><strong>电话：</strong>+86 135 1019 9276</p>
+                        </div>
+                    </div>
+
+                    <div class="tips-box" style="margin-top: 20px;">
+                        <h4>💡 火锅预订Tips</h4>
+                        <p>• 周末人多，建议提前在美团/大众点评排号或预订</p>
+                        <p>• 雨天火锅最治愈！建议选择靠窗位置，欣赏雨景</p>
+                        <p>• 潮汕牛肉火锅清淡鲜美，重庆火锅麻辣开胃，贵州酸汤开胃解腻，可根据口味选择</p>
+                        <p>• 吃完火锅建议预留15分钟走路消食，再去看电影</p>
+                    </div>
+                </div>
+
+                <!-- 第四站：看电影 -->
+                <div class="section-item">
+                    <div class="time">19:00-21:05 | 看电影 <span class="time-highlight">约2小时</span></div>
+                    <div class="title">🎬 《飞驰人生3》· 爆笑解压</div>
+                    
+                    <div class="image-grid">
+                        <img src="https://s.coze.cn/image/ff03HzqemEk/" alt="电影《飞驰人生3》海报">
+                        <img src="https://s.coze.cn/image/NCWSfvZw-fs/" alt="IMAX影厅">
+                        <img src="https://s.coze.cn/image/q0qGTJyWOc0/" alt="电影院">
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📍 影院信息</h4>
+                        <p><strong>中影星美国际影城（西乡天虹店）</strong></p>
+                        <p><strong>地址：</strong>深圳市宝安区西乡大道与新湖路交汇处宝安天虹购物中心3楼</p>
+                        <p><strong>交通：</strong>地铁1号线西乡站A出口，步行约5分钟</p>
+                        <p><strong>电话：</strong>0755-23572832</p>
+                        <p><strong>场次：</strong>19:00开场，21:05散场（建议选择此场次）</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🎬 影院特色</h4>
+                        <p><strong>• 6号激光巨幕厅：</strong>激光巨幕，视听效果震撼，推荐选择</p>
+                        <p><strong>• 5号激光厅：</strong>标准激光厅，画质清晰</p>
+                        <p><strong>• 座位选择：</strong>建议选择中间排（8-12排），观影效果最佳</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🎬 电影信息</h4>
+                        <p><strong>片名：</strong>《飞驰人生3》</p>
+                        <p><strong>时长：</strong>约125分钟</p>
+                        <p><strong>导演：</strong>韩寒</p>
+                        <p><strong>主演：</strong>沈腾、尹正、黄景瑜</p>
+                        <p><strong>类型：</strong>剧情 / 喜剧 / 动作</p>
+                        <p><strong>评分：</strong>9.7分（猫眼评分）</p>
+                        <p style="margin-top: 10px;"><strong>简介：</strong>《飞驰人生》系列续作，延续热血赛车与爆笑喜剧风格。讲述张驰为了重新回到赛场，经历各种爆笑和热血的故事。韩寒导演+沈腾主演的黄金组合，笑点密集又不失感动。</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🎫 票价参考</h4>
+                        <p><strong>激光巨幕厅：</strong>约70-90元/人</p>
+                        <p><strong>激光厅：</strong>约50-70元/人</p>
+                        <p style="margin-top: 10px;"><strong>购票链接：</strong></p>
+                        <p>• <a href="https://www.maoyan.com" target="_blank">猫眼电影</a>（推荐，票价较优惠）</p>
+                        <p>• <a href="https://www.taopiaopiao.com" target="_blank">淘票票</a></p>
+                    </div>
+
+                    <div class="tips-box">
+                        <h4>💡 观影Tips</h4>
+                        <p>• 建议选择<strong>6号激光巨幕厅</strong>，效果更震撼</p>
+                        <p>• 提前15-20分钟到场，买杯奶茶或爆米花</p>
+                        <p>• 电影19:00开场，建议18:40前到达影院取票</p>
+                        <p>• 散场时间约21:05，看完还能顺便逛逛商场</p>
+                        <p>• 雨天观影记得带雨伞，商场内有便利店可以买饮料</p>
+                    </div>
+                </div>
+
+                <!-- 交通与预算 -->
                 <div class="info-grid">
                     <div class="info-card">
                         <h3>🚇 完整交通路线</h3>
@@ -250,9 +378,14 @@
                                 <td>地铁3号线 → 老街站换乘1号线 → 坪洲站</td>
                                 <td>约50分钟</td>
                             </tr>
-                            <tr>
+                            <tr style="border-bottom: 1px solid #eee;">
                                 <td style="padding: 12px 0;"><strong>坪洲 → 西乡天虹影城</strong></td>
-                                <td>地铁1号线 → 西乡站A口</td>
+                                <td>地铁1号线坪洲站 → 西乡站A口</td>
+                                <td>约10分钟</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 0;"><strong>西乡天虹 → 坪洲</strong></td>
+                                <td>地铁1号线西乡站 → 坪洲站</td>
                                 <td>约10分钟</td>
                             </tr>
                         </table>
@@ -272,20 +405,24 @@
                             <span>约50元/人</span>
                         </div>
                         <div class="budget-item">
-                            <span>晚餐火锅</span>
-                            <span>约100元/人</span>
+                            <span>晚餐火锅（自助/特色）</span>
+                            <span>约100-130元/人</span>
                         </div>
                         <div class="budget-item">
-                            <span>电影票</span>
-                            <span>约80元/人</span>
+                            <span>电影票（激光巨幕厅）</span>
+                            <span>约70-90元/人</span>
                         </div>
                         <div class="budget-item">
                             <span>地铁交通</span>
                             <span>约20元/人</span>
                         </div>
                         <div class="budget-item">
+                            <span>奶茶/小食（可选）</span>
+                            <span>约20-30元/人</span>
+                        </div>
+                        <div class="budget-item">
                             <span>合计</span>
-                            <span>约250元/人</span>
+                            <span>约260-320元/人</span>
                         </div>
                     </div>
                 </div>
@@ -297,12 +434,22 @@
                     <p><strong>• 火锅预订：</strong>周末人多，建议提前在美团/大众点评排号</p>
                     <p><strong>• 电影购票：</strong>提前在猫眼/淘票票购票，选好座位</p>
                     <p><strong>• 天气准备：</strong>带好雨伞、穿防滑鞋、带一件薄外套</p>
+                    <p><strong>• 时间安排：</strong>各环节预留15-20分钟缓冲时间，避免匆忙</p>
+                </div>
+
+                <div class="info-box" style="margin-top: 25px;">
+                    <h4>📱 实用链接汇总</h4>
+                    <p><strong>博物馆预约：</strong>微信搜索"深圳珠宝博物馆"公众号</p>
+                    <p><strong>餐厅预订：</strong>美团/大众点评搜索餐厅名称</p>
+                    <p><strong>电影购票：</strong><a href="https://www.maoyan.com" target="_blank">猫眼电影</a> | <a href="https://www.taopiaopiao.com" target="_blank">淘票票</a></p>
+                    <p><strong>天气查询：</strong>深圳气象台官方微信公众号</p>
+                    <p><strong>地铁导航：</strong>深圳地铁官方APP / 高德地图 / 百度地图</p>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <p style="font-size: 1.4em; margin-bottom: 20px;">🎉 祝你雨天玩得开心～享受美好的文艺美食电影之旅！</p>
+            <p style="font-size: 1.4em; margin-bottom: 20px;">🎉 祝雨天玩得开心～享受美好的文艺美食电影之旅！</p>
             <p>📌 以上信息基于2026年4月的公开数据，仅供参考。</p>
             <p style="margin-top: 10px;">实际价格和时间以官方平台实时显示为准，建议出发前再次确认。</p>
             <p style="margin-top: 25px; opacity: 0.8; font-size: 0.95em;">制作：珠宝博物馆+火锅+电影攻略 · 2026年4月5日</p>

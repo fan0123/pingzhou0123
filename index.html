@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💎 珠宝博物馆+火锅+电影 · 雨天完美一日游</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; line-height: 1.8; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .hero { background: linear-gradient(rgba(102, 126, 234, 0.85), rgba(118, 75, 162, 0.85)), url('https://s.coze.cn/image/z8L6b2SoAgs/') center/cover; color: white; text-align: center; padding: 80px 20px; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .hero h1 { font-size: 2.8em; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.3em; max-width: 800px; margin: 0 auto; opacity: 0.95; }
+        .hero-tag { display: inline-block; background: rgba(255,255,255,0.2); padding: 10px 25px; border-radius: 25px; margin-top: 25px; backdrop-filter: blur(10px); font-size: 1.1em; }
+        .weather-alert { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); border-radius: 15px; padding: 25px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(255,154,158,0.3); }
+        .weather-alert h2 { color: #c44569; margin-bottom: 15px; }
+        .weather-tips { background: rgba(255,255,255,0.5); padding: 15px; border-radius: 10px; margin-top: 15px; border-left: 4px solid #c44569; }
+        .plan-card { background: white; border-radius: 20px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .plan-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px; }
+        .plan-header h2 { font-size: 2em; margin-bottom: 15px; }
+        .plan-header .tagline { opacity: 0.95; font-size: 1.2em; }
+        .plan-body { padding: 40px; }
+        .highlight-box { background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 100%); border-left: 4px solid #667eea; padding: 25px; margin-bottom: 30px; border-radius: 0 10px 10px 0; }
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #667eea, #764ba2); border-radius: 3px; }
+        .timeline-item { position: relative; margin-bottom: 35px; background: #f8f9ff; padding: 25px; border-radius: 15px; }
+        .timeline-item::before { content: ''; position: absolute; left: -32px; top: 25px; width: 18px; height: 18px; background: #667eea; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 3px #667eea; }
+        .timeline-item .time { color: #667eea; font-weight: bold; margin-bottom: 12px; font-size: 1.1em; }
+        .timeline-item .title { font-size: 1.4em; font-weight: bold; margin-bottom: 15px; color: #333; }
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 25px 0; }
+        .image-grid img { width: 100%; height: 220px; object-fit: cover; border-radius: 15px; transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .image-grid img:hover { transform: scale(1.05); }
+        .info-box { background: #f8f9ff; border-radius: 12px; padding: 25px; margin: 20px 0; }
+        .info-box h4 { color: #667eea; margin-bottom: 15px; font-size: 1.2em; }
+        .restaurant-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.1); }
+        .restaurant-table th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; text-align: left; }
+        .restaurant-table td { padding: 15px; border-bottom: 1px solid #eee; }
+        .restaurant-table tr:hover { background: #f8f9ff; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
+        .info-card { background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%); border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .info-card h3 { color: #667eea; margin-bottom: 20px; font-size: 1.3em; }
+        .budget-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #ddd; }
+        .budget-item:last-child { border-bottom: none; font-weight: bold; color: #667eea; margin-top: 12px; padding-top: 18px; font-size: 1.1em; }
+        .tips-box { background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%); border-left: 4px solid #ffc107; padding: 25px; margin: 25px 0; border-radius: 0 12px 12px 0; }
+        .tips-box h4 { color: #856404; margin-bottom: 12px; font-size: 1.1em; }
+        .badge { display: inline-block; padding: 6px 15px; border-radius: 20px; font-size: 0.9em; font-weight: 500; }
+        .badge-indoor { background: #d4edda; color: #155724; }
+        .feature-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+        .feature-tag { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border-radius: 25px; font-size: 1em; }
+        .footer { text-align: center; padding: 50px 20px; color: white; opacity: 0.95; }
+        .footer p { margin: 8px 0; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2em; } .plan-header h2 { font-size: 1.6em; } .timeline { padding-left: 30px; } .image-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>💎 珠宝博物馆+火锅+电影</h1>
+            <p>雨天完美一日游 · 看展吃火锅看电影<br>文艺+美食+娱乐，一站式满足！</p>
+            <div class="hero-tag">☔ 全程室内 · 雨天无忧</div>
+        </div>
+
+        <div class="weather-alert">
+            <h2>📅 天气预报提醒</h2>
+            <p>根据深圳市气象台预报，2026年4月4日（周六）至4月6日（周一），深圳持续降雨天气：</p>
+            <p style="margin-top: 10px;"><strong>4月5日（周日）：</strong>中雨转雷阵雨，气温22℃—25℃</p>
+            <div class="weather-tips">
+                <strong>⚠️ 雨天出行温馨提示：</strong><br>
+                • 出门务必携带雨具，建议穿防滑的鞋子<br>
+                • 地铁出行最稳妥，避免暴雨天打车拥堵<br>
+                • 提前查好实时交通，预留充足通勤时间
+            </div>
+        </div>
+
+        <div class="plan-card">
+            <div class="plan-header">
+                <h2>🏛️ 方案：珠宝博物馆看展 → 火锅 → 电影</h2>
+                <div class="tagline">看展拍照 + 美食暖胃 + 电影娱乐，雨天完美组合！</div>
+                <div class="feature-list">
+                    <span class="feature-tag">💎 深圳珠宝博物馆</span>
+                    <span class="feature-tag">🍲 潮汕牛肉火锅</span>
+                    <span class="feature-tag">🎬 电影《飞驰人生》</span>
+                </div>
+            </div>
+            <div class="plan-body">
+                <div class="highlight-box">
+                    <p style="font-size: 1.1em;"><strong>行程安排：</strong>深圳珠宝博物馆看展（2-3小时）→ 潮汕牛肉火锅晚餐 → 看《飞驰人生》电影</p>
+                    <p style="margin-top: 12px; font-size: 1.1em;"><strong>推荐理由：</strong>国内首家珠宝专题公共博物馆，看展拍照超美！水贝商圈逛黄金珠宝市场，再吃一顿热腾腾的火锅，最后看场电影，完美雨天组合。</p>
+                    <p style="margin-top: 12px;"><span class="badge badge-indoor">✓ 全程室内，雨天无影响</span></p>
+                </div>
+
+                <div class="image-grid">
+                    <img src="https://s.coze.cn/image/MHxATSA7svQ/" alt="深圳珠宝博物馆">
+                    <img src="https://s.coze.cn/image/Ruld2lgOCmk/" alt="潮汕牛肉火锅">
+                    <img src="https://s.coze.cn/image/ff03HzqemEk/" alt="电影《飞驰人生》">
+                </div>
+
+                <h3 style="color: #667eea; margin: 35px 0 20px; font-size: 1.5em;">📍 行程详拆</h3>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">11:00-14:00 | 深圳珠宝博物馆</div>
+                        <div class="title">💎 看展拍照 · 国内首家珠宝专题公共博物馆</div>
+                        
+                        <div class="info-box">
+                            <h4>📍 地点信息</h4>
+                            <p><strong>深圳珠宝博物馆</strong></p>
+                            <p><strong>地址：</strong>深圳市罗湖区水贝一路金展珠宝广场3-4楼</p>
+                            <p><strong>开放时间：</strong>周二至周日 10:00-17:00（16:30停止入馆），周一闭馆</p>
+                            <p><strong>门票：</strong>免费，需提前预约</p>
+                            <p><strong>预约方式：</strong>微信搜索"深圳珠宝博物馆"公众号或小程序"宝博票务"预约</p>
+                        </div>
+
+                        <div class="info-box">
+                            <h4>🎨 五大常设展区（3楼）</h4>
+                            <table class="restaurant-table">
+                                <thead><tr><th>展区名称</th><th>内容介绍</th></tr></thead>
+                                <tbody>
+                                    <tr><td><strong>自然之宝</strong></td><td>天然宝石原石、矿物晶体，像走进地质博物馆</td></tr>
+                                    <tr><td><strong>物佩之美</strong></td><td>古今中外珠宝首饰，展示花丝镶嵌、錾刻、珐琅等传统工艺</td></tr>
+                                    <tr><td><strong>设计之光</strong></td><td>现代珠宝设计师的创意作品，面积最大、最丰富</td></tr>
+                                    <tr><td><strong>深圳之路</strong></td><td>深圳珠宝产业发展历程</td></tr>
+                                    <tr><td><strong>湾区之梦</strong></td><td>粤港澳大湾区珠宝行业愿景</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="info-box">
+                            <h4>✨ 特色体验</h4>
+                            <p><strong>• 生辰石测试：</strong>输入生日可查询属于自己的"生辰石"</p>
+                            <p><strong>• 虚拟试戴：</strong>互动屏前可"试戴"亿元翡翠项链等名贵珠宝，拍照打卡很有趣</p>
+                            <p><strong>• 银饰DIY：</strong>工坊区有时会有银饰DIY课程，可亲手制作戒指（需额外付费预约）</p>
+                        </div>
+
+                        <div class="tips-box">
+                            <h4>💡 参观Tips</h4>
+                            <p>• 允许用手机拍照，但<strong>严禁使用闪光灯</strong></p>
+                            <p>• 专业相机（微单/单反）不允许带入馆内，需在入口处寄存</p>
+                            <p>• 饮料和食物不能带入馆内，入口处有免费寄存柜</p>
+                            <p>• 馆内空调温度较低，建议带一件薄外套或披肩</p>
+                            <p>• 参观时长约1.5-2小时，加上拍照建议预留2-3小时</p>
+                        </div>
+
+                        <div class="tips-box">
+                            <h4>🛍️ 周边逛逛：水贝珠宝市场</h4>
+                            <p>博物馆所在的<strong>金展珠宝广场负一楼</strong>及周边街道，全是珠宝零售和批发店。</p>
+                            <p>可以淘到各种小巧精致的银饰、珍珠、水晶，价格很亲民，体验"买黄金像买白菜"的独特氛围！</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="time">14:30-16:00 | 返回坪洲</div>
+                        <div class="title">🚇 地铁返程 · 休息片刻</div>
+                        <div class="info-box">
+                            <h4>📍 交通路线</h4>
+                            <p><strong>深圳珠宝博物馆 → 坪洲</strong></p>
+                            <p>地铁3/7号线（田贝站）→ 1号线（坪洲站）</p>
+                            <p>约50-60分钟，建议预留1小时通勤时间</p>
+                        </div>
+                        <div class="tips-box">
+                            <h4>💡 休息建议</h4>
+                            <p>回到住处休息片刻，整理照片，准备晚上吃火锅看电影的美好时光～</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="time">17:30-19:00 | 晚餐</div>
+                        <div class="title">🍲 潮汕牛肉火锅 · 热腾腾暖胃</div>
+                        
+                        <table class="restaurant-table">
+                            <thead><tr><th>餐厅名称</th><th>菜系</th><th>地址</th><th>人均</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>潮味壹品汕头牛肉火锅</strong></td>
+                                    <td>潮汕牛肉火锅</td>
+                                    <td>西乡街道宝源路1055号前海茶城（距坪洲站C口600米）</td>
+                                    <td>约91元</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>永记鲜切牛肉自助火锅</strong></td>
+                                    <td>潮汕牛肉自助</td>
+                                    <td>永丰社区六区（坪洲站B口步行350米）</td>
+                                    <td>不到100元</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>云山晓渡潮汕牛肉火锅</strong></td>
+                                    <td>潮汕牛肉火锅</td>
+                                    <td>宝安大仟里L4层（坪洲站A口步行390米）</td>
+                                    <td>约100元</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>八合里海记牛肉店</strong></td>
+                                    <td>潮汕牛肉火锅</td>
+                                    <td>深圳多家分店</td>
+                                    <td>约90-120元</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="tips-box" style="margin-top: 20px;">
+                            <h4>💡 火锅推荐理由</h4>
+                            <p>• <strong>潮味壹品</strong>：坪洲站附近，新鲜现切牛肉，吊龙、三花腱超好吃</p>
+                            <p>• <strong>永记鲜切牛肉自助</strong>：自助火锅性价比高，不到100元吃到饱</p>
+                            <p>• <strong>云山晓渡</strong>：大仟里购物中心内，环境好，逛完街吃火锅</p>
+                            <p style="margin-top: 10px;"><strong>📱 预订方式：</strong>美团/大众点评搜索餐厅名称，建议提前排号</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="time">19:30-21:30 | 看电影</div>
+                        <div class="title">🎬 《飞驰人生》· 爆笑解压</div>
+                        
+                        <div class="info-box">
+                            <h4>📍 影院推荐</h4>
+                            <p><strong>中影星美国际影城（西乡天虹店）</strong></p>
+                            <p><strong>地址：</strong>宝安区西乡大道与新湖路交汇处宝安天虹购物中心3楼</p>
+                            <p><strong>交通：</strong>地铁1号线西乡站A出口</p>
+                            <p style="margin-top: 15px;"><strong>另一选择：</strong>中影星美国际影城（南山云城店）</p>
+                        </div>
+
+                        <div class="info-box">
+                            <h4>🎬 电影信息</h4>
+                            <p><strong>片名：</strong>《飞驰人生》</p>
+                            <p><strong>导演：</strong>韩寒</p>
+                            <p><strong>主演：</strong>沈腾</p>
+                            <p><strong>类型：</strong>喜剧 / 动作</p>
+                            <p><strong>简介：</strong>讲述过气赛车手张驰为了重新回到赛场，经历各种爆笑和热血的故事</p>
+                        </div>
+
+                        <div class="tips-box">
+                            <h4>💡 观影Tips</h4>
+                            <p>• 建议选择IMAX激光厅，效果更震撼</p>
+                            <p>• 提前10分钟到场，买杯奶茶或爆米花</p>
+                            <p>• <strong>购票链接：</strong><a href="https://www.maoyan.com" target="_blank">猫眼电影</a>或<a href="https://www.taopiaopiao.com" target="_blank">淘票票</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🚇 完整交通路线</h3>
+                        <table style="width: 100%;">
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px 0;"><strong>坪洲 → 珠宝博物馆</strong></td>
+                                <td>地铁1号线 → 老街站换乘3号线 → 田贝站F口</td>
+                                <td>约50分钟</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px 0;"><strong>珠宝博物馆 → 坪洲</strong></td>
+                                <td>地铁3号线 → 老街站换乘1号线 → 坪洲站</td>
+                                <td>约50分钟</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 0;"><strong>坪洲 → 西乡天虹影城</strong></td>
+                                <td>地铁1号线 → 西乡站A口</td>
+                                <td>约10分钟</td>
+                            </tr>
+                        </table>
+                        <div class="tips-box" style="margin-top: 20px;">
+                            <strong>雨天交通提醒：</strong>全程地铁出行，最稳妥！避免暴雨天打车拥堵。
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>💰 预算参考</h3>
+                        <div class="budget-item">
+                            <span>珠宝博物馆门票</span>
+                            <span>免费</span>
+                        </div>
+                        <div class="budget-item">
+                            <span>午餐（水贝商圈简餐）</span>
+                            <span>约50元/人</span>
+                        </div>
+                        <div class="budget-item">
+                            <span>晚餐火锅</span>
+                            <span>约100元/人</span>
+                        </div>
+                        <div class="budget-item">
+                            <span>电影票</span>
+                            <span>约80元/人</span>
+                        </div>
+                        <div class="budget-item">
+                            <span>地铁交通</span>
+                            <span>约20元/人</span>
+                        </div>
+                        <div class="budget-item">
+                            <span>合计</span>
+                            <span>约250元/人</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips-box" style="margin-top: 30px;">
+                    <h4>⚠️ 重要提醒</h4>
+                    <p><strong>• 博物馆预约：</strong>提前在"深圳珠宝博物馆"公众号预约，凭身份证或二维码入馆</p>
+                    <p><strong>• 博物馆注意事项：</strong>禁止闪光灯、禁止携带专业相机、禁止带饮料食物入馆</p>
+                    <p><strong>• 火锅预订：</strong>周末人多，建议提前在美团/大众点评排号</p>
+                    <p><strong>• 电影购票：</strong>提前在猫眼/淘票票购票，选好座位</p>
+                    <p><strong>• 天气准备：</strong>带好雨伞、穿防滑鞋、带一件薄外套</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 1.4em; margin-bottom: 20px;">🎉 祝你雨天玩得开心～享受美好的文艺美食电影之旅！</p>
+            <p>📌 以上信息基于2026年4月的公开数据，仅供参考。</p>
+            <p style="margin-top: 10px;">实际价格和时间以官方平台实时显示为准，建议出发前再次确认。</p>
+            <p style="margin-top: 25px; opacity: 0.8; font-size: 0.95em;">制作：珠宝博物馆+火锅+电影攻略 · 2026年4月5日</p>
+        </div>
+    </div>
+</body>
+</html>

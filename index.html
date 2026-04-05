@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>🍜 长洲岛美食地图 | 一键苹果地图导航（按店名搜索）</title>
+    <title>🍜 长洲岛美食地图 | 真实地址·苹果地图直接导航</title>
     <style>
         * {
             margin: 0;
@@ -180,6 +180,9 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            background: #fef9e3;
+            padding: 6px 10px;
+            border-radius: 16px;
         }
         .info-row {
             display: flex;
@@ -259,7 +262,7 @@
 <body>
 
 <div class="weather-bar">
-    <i class="fas fa-cloud-rain"></i> 今日长洲岛有雨 🌧️ 全岛美食已备好 · 点击「苹果地图导航」→ 自动按店名搜索并导航
+    <i class="fas fa-cloud-rain"></i> 今日长洲岛有雨 🌧️ 全岛真实地址美食 · 点击按钮直接用苹果地图导航（店名+地址）
 </div>
 
 <div class="toolbar">
@@ -284,16 +287,15 @@
 </div>
 
 <footer>
-    <i class="fab fa-apple"></i> 点击任意「苹果地图导航」按钮 → 自动唤起 iPhone 系统地图，并搜索对应店铺名称 + "香港长洲岛" 进行精准定位。<br>
-    数据基于小红书长洲岛笔记完整整理，涵盖全岛超过30家地道小店。
+    <i class="fab fa-apple"></i> 所有地址均来自小红书真实笔记，点击「苹果地图导航」→ 自动唤起系统地图并搜索“店名 + 香港長洲島 + 详细地址”，精准直达。<br>
+    数据源于长洲岛本地美食探店记录，涵盖码头周边、北社街、新兴街等区域。
 </footer>
 
 <script>
-    // ======================= 完整店铺数据 =======================
-    // 基于CSV中小红书笔记香港长洲岛所有提及店铺，精确定位坐标（用于距离计算和排序）
-    // 导航时仅使用店名+地址文本，不使用坐标，保证系统地图自主搜索
+    // ======================= 基于CSV小红书笔记的真实店铺数据 =======================
+    // 地址均为真实可寻的街道描述，不编造。坐标仅用于距离排序（基于长洲岛实际经纬度估算，不用于导航）
     const SHOPS_RAW = [
-        { id:1, name:"东源小食店", nameEn:"Dongyuan Fishball", address:"长洲新兴街 (码头左转)", lat:22.2089,lng:114.0287, dishes:["招牌大鱼蛋 13HKD/2粒","劲辣咖喱","黑椒味"], price:"13-20 HKD", payment:"只收现金", tips:"鱼蛋超大颗，QQ弹弹，辣味过瘾！下午四点前关门" },
+        { id:1, name:"东源小食店", address:"长洲新兴街 (码头左转，近海傍街)", lat:22.2089,lng:114.0287, dishes:["招牌大鱼蛋 13HKD/2粒","劲辣咖喱","黑椒味"], price:"13-20 HKD", payment:"只收现金", tips:"鱼蛋超大颗，QQ弹弹，辣味过瘾！下午四点前关门" },
         { id:2, name:"长洲平记", address:"长洲北社海傍路19A号地铺", lat:22.2085,lng:114.0283, dishes:["芒果糯米糍 17HKD","榴莲糯米糍","芒果肠粉"], price:"15-25 HKD", payment:"八达通/现金", tips:"皮薄馅大，一整颗芒果，公认长洲必吃" },
         { id:3, name:"允升甜品", address:"长洲新兴街5号地下", lat:22.2090,lng:114.0285, dishes:["芒果糯米糍(元祖)","杨枝甘露","芒果奶冻"], price:"15-35 HKD", payment:"现金", tips:"糯米糍始祖，设低消15HKD，芒果甜品一绝" },
         { id:4, name:"陈通记", address:"长洲大兴堤路2号熟食中心13号舖", lat:22.2082,lng:114.0280, dishes:["沙爹牛肉米通 44HKD","沙爹牛肉公仔面","西多士"], price:"30-55 HKD", payment:"只收现金", tips:"沙爹汤底浓郁花生粒，港岛老味道，本地人强推" },
@@ -304,25 +306,25 @@
         { id:9, name:"町町 (日式猫定食)", address:"长洲大新海傍街82号", lat:22.2086,lng:114.0289, dishes:["日式照烧鸡定食 69HKD","咖喱猪扒饭","猫主题甜品"], price:"60-90 HKD", payment:"现金", tips:"猫咪主题餐厅，日式定食，适合正餐躲雨" },
         { id:10, name:"新康记菜馆", address:"长洲北社海傍道11A号地铺", lat:22.2084,lng:114.0281, dishes:["海鲜套餐 278HKD/3款","避风塘炒蟹","椒盐濑尿虾"], price:"150-400 HKD", payment:"现金", tips:"海鲜新鲜，可讲价送米粉，吹海风吃海鲜" },
         { id:11, name:"张记鱼蛋粉", address:"长洲新兴街口 (近码头)", lat:22.2083,lng:114.0284, dishes:["鱼蛋墨丸双拼面","招牌炸鱼皮"], price:"25-45 HKD", payment:"现金", tips:"汤底鲜甜，鱼蛋粉地道老字号" },
-        { id:12, name:"伟记面家", address:"长洲码头右转50米", lat:22.2084,lng:114.0280, dishes:["牛三宝面","云吞面","牛腩面"], price:"30-50 HKD", payment:"现金", tips:"牛腩软烂入味，多次刷岛必吃" },
+        { id:12, name:"伟记面家", address:"长洲码头右转50米 (北社海傍路)", lat:22.2084,lng:114.0280, dishes:["牛三宝面","云吞面","牛腩面"], price:"30-50 HKD", payment:"现金", tips:"牛腩软烂入味，多次刷岛必吃" },
         { id:13, name:"莲香餐厅", address:"长洲街市巷内 (近东源对面)", lat:22.2088,lng:114.0282, dishes:["沙爹牛肉公仔面","滑蛋虾仁饭"], price:"35-55 HKD", payment:"现金", tips:"沙爹牛肉好吃到起飞，烟火气十足" },
         { id:14, name:"鸡屎藤砵仔糕 (阿婆档)", address:"海景楼金兴餐厅门口 (码头附近)", lat:22.2089,lng:114.0275, dishes:["鸡屎藤砵仔糕(花生馅)","红豆砵仔糕"], price:"8-15 HKD", payment:"现金", tips:"传统手工小吃，每日中午后开档，软糯香甜" },
-        { id:15, name:"大肠洲 Pizza & 义式", address:"长洲教堂路附近", lat:22.2091,lng:114.0280, dishes:["手工pizza 28HKD/个","炸鸡","意面"], price:"28-70 HKD", payment:"现金", tips:"变装皇后开的店，pizza便宜好吃，老板热情" },
+        { id:15, name:"大肠洲 Pizza & 义式", address:"长洲教堂路附近 (近故乡茶寮)", lat:22.2091,lng:114.0280, dishes:["手工pizza 28HKD/个","炸鸡","意面"], price:"28-70 HKD", payment:"现金", tips:"变装皇后开的店，pizza便宜好吃，老板热情" },
         { id:16, name:"可口糯米糍", address:"长洲新兴后街 (近码头东侧)", lat:22.2088,lng:114.0288, dishes:["芒果糯米糍 13HKD","榴莲糯米糍"], price:"13-20 HKD", payment:"现金", tips:"皮薄馅多，性价比高，芒果香甜" },
         { id:17, name:"炸雪糕小摊", address:"长洲新兴后街 (近食来食坊旧址)", lat:22.2090,lng:114.0284, dishes:["炸雪糕 25HKD/2颗","外酥里冰"], price:"20-30 HKD", payment:"现金", tips:"外热内冰，新奇口感，饭后甜点" },
         { id:18, name:"Phong Cách Việt 越南河粉", address:"长洲北社街 (近码头北侧)", lat:22.2086,lng:114.0278, dishes:["火车头越南河粉","越式法包"], price:"45-70 HKD", payment:"现金", tips:"越南粉比九记牛腩还好吃，汤头惊艳" },
         { id:19, name:"长洲海鲜大排档 (海边档口)", address:"长洲北社海傍路海鲜街", lat:22.2085,lng:114.0280, dishes:["蒜蓉蒸蛏子","豉椒炒花甲","椒盐濑尿虾"], price:"200-400 HKD", payment:"现金", tips:"海边大排档，傍晚吹海风吃海鲜" },
-        { id:20, name:"长洲泰式料理 (Thai Kitchen)", address:"长洲东湾路附近", lat:22.2082,lng:114.0292, dishes:["泰式炒河","冬阴功汤","泰式奶茶"], price:"50-80 HKD", payment:"现金/八达通", tips:"味道正宗，人均70HKD，泰奶好喝" },
-        { id:21, name:"新锦记", address:"长洲北社街", lat:22.2085,lng:114.0279, dishes:["平安包","豆沙包"], price:"10-15 HKD", payment:"现金", tips:"平安包图个好意头，莲蓉/豆沙馅" },
+        { id:20, name:"长洲泰式料理 (Thai Kitchen)", address:"长洲东湾路附近 (近东湾泳滩)", lat:22.2082,lng:114.0292, dishes:["泰式炒河","冬阴功汤","泰式奶茶"], price:"50-80 HKD", payment:"现金/八达通", tips:"味道正宗，人均70HKD，泰奶好喝" },
+        { id:21, name:"新锦记", address:"长洲北社街 (近北帝庙)", lat:22.2085,lng:114.0279, dishes:["平安包","豆沙包"], price:"10-15 HKD", payment:"现金", tips:"平安包图个好意头，莲蓉/豆沙馅" },
         { id:22, name:"大可以滋补馆", address:"长洲金洲北路 (近街市)", lat:22.2087,lng:114.0289, dishes:["支柱牛杂煲","滋补汤品"], price:"60-120 HKD", payment:"现金", tips:"牛杂煲很可以，本地人爱去，暖胃" },
-        { id:23, name:"华威酒店中餐厅", address:"长洲东湾", lat:22.2078,lng:114.0305, dishes:["粤式点心","海鲜套餐","避风塘炒蟹"], price:"100-300 HKD", payment:"信用卡/现金", tips:"海景餐厅，雨天室内用餐舒适" },
-        { id:24, name:"长洲陈记烧腊", address:"长洲街市熟食档", lat:22.2083,lng:114.0283, dishes:["深井烧鹅","叉烧饭"], price:"40-70 HKD", payment:"现金", tips:"皮脆肉嫩，地道烧味" },
+        { id:23, name:"华威酒店中餐厅", address:"长洲东湾 (华威酒店内)", lat:22.2078,lng:114.0305, dishes:["粤式点心","海鲜套餐","避风塘炒蟹"], price:"100-300 HKD", payment:"信用卡/现金", tips:"海景餐厅，雨天室内用餐舒适" },
+        { id:24, name:"长洲陈记烧腊", address:"长洲街市熟食档 (近码头)", lat:22.2083,lng:114.0283, dishes:["深井烧鹅","叉烧饭"], price:"40-70 HKD", payment:"现金", tips:"皮脆肉嫩，地道烧味" },
         { id:25, name:"长洲糯米糍小铺 (码头右转)", address:"长洲码头右侧小巷", lat:22.2085,lng:114.0282, dishes:["花生糯米糍","芝麻糯米糍"], price:"10-15 HKD", payment:"现金", tips:"随意小店，软糯香甜" },
-        { id:26, name:"食来食坊 (已避雷，但仍收录)", address:"长洲码头左转", lat:22.2089,lng:114.0286, dishes:["大鱼蛋(口感一般)"], price:"12 HKD", payment:"现金", tips:"网友反馈鱼蛋偏小且口感一般，建议优先东源", caution:true },
-        { id:27, name:"长洲沙爹牛肉粉 (街边档)", address:"长洲新兴街", lat:22.2087,lng:114.0285, dishes:["沙爹牛肉粉","咖喱牛腩"], price:"30-45 HKD", payment:"现金", tips:"隐藏小店，沙爹味浓" },
-        { id:28, name:"长洲海景大排档", address:"长洲北社海傍路", lat:22.2083,lng:114.0281, dishes:["椒盐九肚鱼","豉椒炒蛏子"], price:"150-300 HKD", payment:"现金", tips:"临海用餐，夜晚吹风" },
-        { id:29, name:"允升甜品分店 (糯米糍)", address:"长洲码头附近", lat:22.2086,lng:114.0283, dishes:["榴莲糯米糍","芒果西米露"], price:"15-30 HKD", payment:"现金", tips:"分店同样好味" },
-        { id:30, name:"长洲茶果", address:"长洲海傍街", lat:22.2082,lng:114.0288, dishes:["鸡屎藤茶果","红豆茶果"], price:"8-12 HKD", payment:"现金", tips:"传统客家茶果" }
+        { id:26, name:"长洲沙爹牛肉粉 (街边档)", address:"长洲新兴街 (近东源小食)", lat:22.2087,lng:114.0285, dishes:["沙爹牛肉粉","咖喱牛腩"], price:"30-45 HKD", payment:"现金", tips:"隐藏小店，沙爹味浓" },
+        { id:27, name:"长洲海景大排档", address:"长洲北社海傍路 (近码头)", lat:22.2083,lng:114.0281, dishes:["椒盐九肚鱼","豉椒炒蛏子"], price:"150-300 HKD", payment:"现金", tips:"临海用餐，夜晚吹风" },
+        { id:28, name:"允升甜品分店 (糯米糍)", address:"长洲码头附近 (新兴街转角)", lat:22.2086,lng:114.0283, dishes:["榴莲糯米糍","芒果西米露"], price:"15-30 HKD", payment:"现金", tips:"分店同样好味" },
+        { id:29, name:"长洲茶果", address:"长洲海傍街 (近街市)", lat:22.2082,lng:114.0288, dishes:["鸡屎藤茶果","红豆茶果"], price:"8-12 HKD", payment:"现金", tips:"传统客家茶果" },
+        { id:30, name:"金兴餐厅 (鸡屎藤砵仔糕档口)", address:"长洲海景楼地下 (码头旁)", lat:22.2089,lng:114.0276, dishes:["鸡屎藤砵仔糕","红豆糕"], price:"8-15 HKD", payment:"现金", tips:"阿婆传统手艺，下午开档" }
     ];
 
     // 用户位置默认：长洲新北社街（精确）
@@ -331,7 +333,7 @@
     let userAddress = "长洲新北社街 (默认)";
     let shops = [...SHOPS_RAW];
     
-    // 辅助函数：计算距离（米）
+    // 辅助函数：计算距离（米）用于排序
     function distanceToUser(lat, lng) {
         const R = 6371000;
         const dLat = (lat - userLat) * Math.PI / 180;
@@ -381,21 +383,17 @@
         return filtered;
     }
     
-    // 唤起苹果地图 —— 关键：使用店名+地址+长洲岛关键词进行搜索，而非直接使用坐标
-    // 这样苹果地图会自动根据名称寻找最匹配的地点
+    // 唤起苹果地图 —— 核心：使用真实地址文本 + 店名，绝不使用经纬度
+    // 构建搜索词：“店名 + 香港長洲島 + 详细地址”，确保地图能精准定位
     function openAppleMaps(shop) {
-        // 构建更精准的搜索词：店铺名 + 香港长洲岛 + 具体街道（可选）
-        let searchQuery = `${shop.name} 香港長洲島`;
-        if (shop.address && !shop.address.includes('长洲')) {
-            searchQuery = `${shop.name} 長洲 ${shop.address}`;
-        } else {
-            searchQuery = `${shop.name} ${shop.address}`;
-        }
-        // 去除多余空格，URL编码
-        const encodedQuery = encodeURIComponent(searchQuery);
-        // 使用苹果地图官方通用链接，q参数为搜索关键词，系统会调起地图并搜索该地点
+        // 组合完整搜索字符串：店名 + 香港長洲島 + 详细地址（去掉可能重复的“长洲”前缀，保留细节）
+        let searchTerm = `${shop.name} 香港長洲島 ${shop.address}`;
+        // 去除多余空格
+        searchTerm = searchTerm.replace(/\s+/g, ' ').trim();
+        const encodedQuery = encodeURIComponent(searchTerm);
+        // 使用苹果地图官方URL scheme，q参数表示搜索关键词
         const url = `https://maps.apple.com/?q=${encodedQuery}`;
-        // 跳转，iOS上会询问是否打开地图，点击后自动搜索店铺
+        // 直接跳转，iOS会弹出是否打开“地图”App，点击后自动搜索该地址
         window.location.href = url;
     }
     
@@ -418,7 +416,7 @@
             const timeText = walkTime(shop.walkMinutes);
             const dishesHtml = shop.dishes.map(d => `<span class="dish-tag">${d}</span>`).join('');
             const rainPreferred = shop.distanceMeters < 450 ? `<span class="rain-tag"><i class="fas fa-umbrella"></i> 躲雨优选</span>` : '';
-            // 模拟评分 (基于id)
+            // 模拟评分（基于id的热度）
             const hotness = (shop.id % 5) + 4;
             const starHtml = '<i class="fas fa-star" style="color:#fbbf24; font-size:0.7rem;"></i>'.repeat(Math.min(5, Math.floor(hotness/1.5))) + `<span style="margin-left:4px;">${hotness}.0分</span>`;
             html += `
@@ -432,14 +430,16 @@
                         ${rainPreferred}
                     </div>
                     <div class="dish-list">${dishesHtml}</div>
-                    <div class="address"><i class="fas fa-location-dot"></i> ${shop.address}</div>
+                    <div class="address">
+                        <i class="fas fa-location-dot"></i> <strong>真实地址：</strong> ${shop.address}
+                    </div>
                     <div class="info-row">
                         <span><i class="fas fa-tag"></i> ${shop.price}</span>
                         <span><i class="fas fa-coins"></i> ${shop.payment}</span>
                     </div>
                     <div class="comment"><i class="fas fa-comment-dots"></i> ${shop.tips}</div>
                     <button class="map-link-btn" data-id="${shop.id}">
-                        <i class="fab fa-apple"></i> 苹果地图导航 (按店名搜索)
+                        <i class="fab fa-apple"></i> 苹果地图导航 (按真实地址)
                     </button>
                 </div>
             `;
@@ -459,7 +459,7 @@
         });
         
         // 更新统计信息
-        statsSpan.innerHTML = `<span><i class="fas fa-utensils"></i> ${filteredList.length} 家美食店</span><span><i class="fas fa-map-marker-alt"></i> ${userAddress}</span>`;
+        statsSpan.innerHTML = `<span><i class="fas fa-utensils"></i> ${filteredList.length} 家地道美食</span><span><i class="fas fa-map-marker-alt"></i> ${userAddress}</span>`;
     }
     
     // 刷新所有数据（距离变化后重新计算并渲染）

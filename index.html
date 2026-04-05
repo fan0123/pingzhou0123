@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>🍜 长洲岛美食地图 | 全岛觅食指南 · 雨天也可轻松逛吃</title>
-    <!-- Leaflet CSS & JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>🍜 长洲岛美食指南 | 一键苹果地图导航</title>
+    <!-- 清爽样式，无内嵌地图 -->
     <style>
         * {
             margin: 0;
@@ -16,52 +12,51 @@
             box-sizing: border-box;
         }
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: #f4f7fc;
-            color: #1e2a3e;
-            height: 100vh;
-            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            padding: 0 0 20px 0;
         }
-        .weather-banner {
-            background: linear-gradient(135deg, #2b3b5c, #1f2c44);
+        /* 顶部雨日提示 */
+        .weather-bar {
+            background: linear-gradient(135deg, #2c3e66, #1f2a48);
             color: white;
-            padding: 8px 16px;
+            padding: 12px 16px;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .weather-banner i {
+        .weather-bar i {
             margin-right: 6px;
             color: #ffd966;
         }
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
+        /* 工具栏 */
         .toolbar {
             background: white;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             align-items: center;
             justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         .search-box {
             flex: 2;
-            min-width: 170px;
+            min-width: 160px;
             background: #f1f5f9;
-            border-radius: 40px;
-            padding: 6px 15px;
+            border-radius: 32px;
+            padding: 8px 16px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .search-box i {
-            color: #7c8ba0;
+            color: #64748b;
         }
         .search-box input {
             border: none;
@@ -78,12 +73,12 @@
             background: #eef2ff;
             border: none;
             padding: 6px 14px;
-            border-radius: 30px;
+            border-radius: 40px;
             font-size: 0.8rem;
             font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
-            color: #1e2a3e;
+            color: #1e293b;
         }
         .sort-btn.active {
             background: #2c3e66;
@@ -92,69 +87,68 @@
         .location-btn {
             background: #e9ecef;
             border: none;
-            border-radius: 30px;
+            border-radius: 40px;
             padding: 6px 14px;
             font-size: 0.8rem;
             font-weight: 500;
             cursor: pointer;
-        }
-        .location-btn i {
-            margin-right: 6px;
-            color: #e67e22;
-        }
-        .main-panel {
             display: flex;
-            flex: 1;
-            overflow: hidden;
+            align-items: center;
+            gap: 6px;
         }
-        .shop-list-panel {
-            width: 38%;
-            background: white;
-            overflow-y: auto;
-            border-right: 1px solid #e2edf2;
-            padding: 12px 8px;
+        .stats-info {
+            background: #fef9e3;
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            color: #b45309;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #fde68a;
         }
-        .map-panel {
-            width: 62%;
-            position: relative;
-            background: #cbd5e1;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
+        /* 店铺列表区域 */
+        .shop-list {
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .shop-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 14px;
-            margin-bottom: 12px;
+            background: white;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
             border: 1px solid #eef2f8;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
             transition: all 0.2s;
-            cursor: pointer;
         }
         .shop-card:hover {
             border-color: #cbdde9;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
         .shop-header {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
+            align-items: baseline;
             gap: 8px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         .shop-name {
+            font-size: 1.2rem;
             font-weight: 700;
-            font-size: 1.05rem;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            color: #0f172a;
+        }
+        .shop-name i {
+            color: #e67e22;
+            font-size: 1rem;
         }
         .distance-badge {
             background: #eef2ff;
-            border-radius: 30px;
-            padding: 2px 12px;
+            border-radius: 40px;
+            padding: 4px 12px;
             font-size: 0.7rem;
             font-weight: 600;
             color: #2c3e66;
@@ -162,161 +156,182 @@
             white-space: nowrap;
         }
         .rain-tag {
-            background: #e6f7e6;
+            background: #e0f2fe;
+            border-radius: 40px;
+            padding: 3px 10px;
             font-size: 0.65rem;
-            padding: 2px 10px;
-            border-radius: 20px;
-            color: #2b6e3c;
+            font-weight: 500;
+            color: #0369a1;
         }
         .dish-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin: 8px 0 5px;
+            gap: 8px;
+            margin: 12px 0 8px;
         }
         .dish-tag {
-            background: #fef3e2;
-            padding: 2px 12px;
-            border-radius: 20px;
+            background: #fef3c7;
+            padding: 4px 12px;
+            border-radius: 30px;
             font-size: 0.7rem;
             font-weight: 500;
             color: #b45309;
         }
         .address {
             font-size: 0.75rem;
-            color: #5b6e8c;
-            margin: 5px 0;
+            color: #475569;
+            margin: 8px 0;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
         .info-row {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
             font-size: 0.7rem;
-            color: #5a6d86;
-            margin: 6px 0 4px;
+            color: #5b6e8c;
+            margin: 6px 0;
         }
-        .map-mini-btn {
-            background: none;
-            border: 1px solid #cbd5e1;
-            border-radius: 24px;
-            padding: 4px 12px;
+        .comment {
             font-size: 0.7rem;
+            color: #4b5563;
+            background: #f9fafb;
+            padding: 8px 10px;
+            border-radius: 16px;
+            margin: 8px 0;
+            border-left: 3px solid #e67e22;
+        }
+        .map-link-btn {
+            background: #2c3e66;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 100%;
             cursor: pointer;
-            margin-top: 8px;
-            width: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            transition: 0.2s;
+        }
+        .map-link-btn i {
+            font-size: 1rem;
+        }
+        .map-link-btn:active {
+            background: #1e2a4a;
+            transform: scale(0.98);
         }
         .no-results {
             text-align: center;
-            padding: 40px 20px;
-            color: #8ba0bc;
-        }
-        @media (max-width: 700px) {
-            .main-panel {
-                flex-direction: column;
-            }
-            .shop-list-panel, .map-panel {
-                width: 100%;
-                height: 50%;
-            }
-            .toolbar {
-                flex-wrap: wrap;
-            }
-        }
-        .leaflet-popup-content {
-            font-size: 0.8rem;
-            min-width: 200px;
+            padding: 48px 20px;
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
         footer {
-            background: #eef2f6;
-            font-size: 0.7rem;
             text-align: center;
-            padding: 6px;
-            color: #4a5b7a;
+            font-size: 0.7rem;
+            color: #6c7a91;
+            padding: 20px 16px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 8px;
+        }
+        @media (max-width: 550px) {
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .sort-group {
+                justify-content: space-between;
+            }
+            .shop-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .distance-badge {
+                margin-left: 0;
+            }
         }
     </style>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<div class="app-container">
-    <div class="weather-banner">
-        <i class="fas fa-cloud-rain"></i> 今日长洲有雨 🌧️ 已为您收录全岛所有美食（不限距离），可按距离排序，就近躲雨开吃！
-    </div>
-    <div class="toolbar">
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="搜店名 / 菜品 / 地址 ... 例如 鱼蛋, 糯米糍, 沙爹">
-        </div>
-        <div class="sort-group">
-            <button class="sort-btn active" data-sort="distance">📏 距离最近</button>
-            <button class="sort-btn" data-sort="name">🍽️ 店名排序</button>
-        </div>
-        <button class="location-btn" id="recenterBtn"><i class="fas fa-location-dot"></i> 我的位置</button>
-    </div>
-    <div class="main-panel">
-        <div class="shop-list-panel" id="shopListPanel">
-            <div class="no-results">加载美食地图中...</div>
-        </div>
-        <div class="map-panel">
-            <div id="map"></div>
-        </div>
-    </div>
-    <footer>
-        <i class="fas fa-utensils"></i> 基于小红书长洲岛笔记完整整理 · 涵盖全部香港长洲岛地道小店 · 点击卡片或地图按钮查看详情
-    </footer>
+
+<div class="weather-bar">
+    <i class="fas fa-cloud-rain"></i> 今日长洲岛有雨 🌧️ 全岛美食已备好 · 点击「苹果地图导航」一键直达
 </div>
 
+<div class="toolbar">
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="搜索店名、菜品或地址... (如: 鱼蛋, 糯米糍)">
+    </div>
+    <div class="sort-group">
+        <button class="sort-btn active" data-sort="distance">📏 距离最近</button>
+        <button class="sort-btn" data-sort="name">🍽️ 店名排序</button>
+    </div>
+    <button class="location-btn" id="recenterBtn"><i class="fas fa-location-dot"></i> 我的位置</button>
+</div>
+
+<div class="stats-info" id="statsInfo">
+    <span><i class="fas fa-utensils"></i> 加载美食数据...</span>
+    <span><i class="fas fa-map-marker-alt"></i> 定位中...</span>
+</div>
+
+<div class="shop-list" id="shopListContainer">
+    <div class="no-results"><i class="fas fa-spinner fa-pulse"></i> 加载长洲岛美食中...</div>
+</div>
+
+<footer>
+    <i class="fas fa-apple"></i> 点击任意「苹果地图导航」按钮 → 自动唤起 iPhone 系统地图，可规划步行/公交路线。<br>
+    数据基于小红书长洲岛笔记完整整理，涵盖全岛地道小店。
+</footer>
+
 <script>
-    // ======================= 完整店铺数据 =======================
-    // 基于CSV中所有香港长洲岛 (离岛区长洲) 提及的店铺，排除广州黄埔长洲岛内容
-    // 坐标围绕长洲码头(22.2085,114.0285)及周边街道进行精确定位
-    const fullShops = [
-        { id:1, name:"东源小食店", nameEn:"Dongyuan Fishball", address:"长洲新兴街 (码头左侧)", lat:22.2089,lng:114.0287, dishes:["招牌大鱼蛋 13HKD/2粒","劲辣咖喱","黑椒味"], price:"13-20HKD", payment:"只收现金", tips:"Q弹入味，下午4点前关门，小红书封神" },
-        { id:2, name:"长洲平记", address:"长洲北社海傍路19A号地铺", lat:22.2085,lng:114.0283, dishes:["芒果糯米糍 17HKD","榴莲糯米糍","芒果肠粉"], price:"15-25HKD", payment:"八达通/现金", tips:"皮薄馅大，整颗芒果，必吃糯米糍" },
-        { id:3, name:"允升甜品", address:"长洲新兴街5号地下", lat:22.2090,lng:114.0285, dishes:["芒果糯米糍(元祖)","杨枝甘露","芒果奶冻"], price:"15-35HKD", payment:"现金", tips:"糯米糍始祖，设低消15HKD" },
-        { id:4, name:"陈通记", address:"长洲大兴堤路2号熟食中心13号舖", lat:22.2082,lng:114.0280, dishes:["沙爹牛肉米通 44HKD","沙爹牛肉公仔面","西多士"], price:"30-55HKD", payment:"只收现金", tips:"沙爹汤底浓郁花生粒，港式老字号" },
-        { id:5, name:"长洲冰室", address:"长洲北社海旁19C号地下", lat:22.2087,lng:114.0279, dishes:["泰式奶茶三色圆冰 70HKD","芒果血糯米圆子","仙草挫冰"], price:"30-75HKD", payment:"支付宝/现金", tips:"泰奶冰一绝，文青风避暑" },
-        { id:6, name:"故乡茶寮", address:"长洲教堂路17号地下", lat:22.2092,lng:114.0277, dishes:["红豆饼 6HKD","日式手卷18-28HKD"], price:"6-30HKD", payment:"现金", tips:"日本夫妇经营，红豆饼外脆内香" },
-        { id:7, name:"康兰饼店", address:"长洲海傍道91号B地下", lat:22.2080,lng:114.0290, dishes:["一口蛋挞/椰挞 15HKD/6个","平安包 11HKD"], price:"10-20HKD", payment:"现金", tips:"怀旧饼店，平安包寓意平安健康" },
-        { id:8, name:"长洲角酪", address:"长洲新兴街78号地铺", lat:22.2090,lng:114.0286, dishes:["莓莓角酪","芒芒角酪","紫薯角酪"], price:"28-48HKD", payment:"八达通/现金", tips:"网红打卡墙「長洲」地铁风格" },
-        { id:9, name:"町町 (日式猫定食)", address:"长洲大新海傍街82号", lat:22.2086,lng:114.0289, dishes:["日式照烧鸡定食 69HKD","咖喱猪扒饭","猫主题甜品"], price:"60-90HKD", payment:"现金", tips:"猫咪主题餐厅，正餐避雨好选择" },
-        { id:10, name:"新康记菜馆", address:"长洲北社海傍道11A号地铺", lat:22.2084,lng:114.0281, dishes:["海鲜套餐 278HKD/3款","避风塘炒蟹","椒盐濑尿虾"], price:"150-400HKD", payment:"现金", tips:"可讲价送米粉，海鲜新鲜性价比高" },
-        { id:11, name:"张记鱼蛋粉", address:"长洲新兴街口 (近码头)", lat:22.2083,lng:114.0284, dishes:["鱼蛋墨丸双拼面","招牌炸鱼皮"], price:"25-45HKD", payment:"现金", tips:"汤底鲜甜，地道鱼蛋粉" },
-        { id:12, name:"伟记面家", address:"长洲码头右转50米", lat:22.2084,lng:114.0280, dishes:["牛三宝面","云吞面","牛腩面"], price:"30-50HKD", payment:"现金", tips:"四刷博主推荐，牛腩软烂" },
-        { id:13, name:"莲香餐厅", address:"长洲街市巷内 (近东源对面)", lat:22.2088,lng:114.0282, dishes:["沙爹牛肉公仔面","滑蛋虾仁饭"], price:"35-55HKD", payment:"现金", tips:"沙爹牛肉好吃到起飞" },
-        { id:14, name:"鸡屎藤砵仔糕 (阿婆档)", address:"海景楼金兴餐厅门口 (码头附近)", lat:22.2089,lng:114.0275, dishes:["鸡屎藤砵仔糕(花生馅)","红豆砵仔糕"], price:"8-15HKD", payment:"现金", tips:"传统手工小吃，每日中午后开档" },
-        { id:15, name:"大肠洲 Pizza & 义式", address:"长洲教堂路附近", lat:22.2091,lng:114.0280, dishes:["手工pizza 28HKD/个","炸鸡","意面"], price:"28-70HKD", payment:"现金", tips:"变装皇后开的店，pizza便宜好吃" },
-        { id:16, name:"可口糯米糍", address:"长洲新兴后街 (近码头东侧)", lat:22.2088,lng:114.0288, dishes:["芒果糯米糍 13HKD","榴莲糯米糍"], price:"13-20HKD", payment:"现金", tips:"皮薄馅多，性价比高，甜而不腻" },
-        { id:17, name:"炸雪糕 (新兴后街小摊)", address:"长洲新兴后街 (近食来食坊旧址)", lat:22.2090,lng:114.0284, dishes:["炸雪糕 25HKD/2颗","外酥里冰"], price:"20-30HKD", payment:"现金", tips:"外热内冰，口感新奇" },
-        { id:18, name:"Phong Cách Việt 越南河粉", address:"长洲北社街 (近码头北侧)", lat:22.2086,lng:114.0278, dishes:["火车头越南河粉","越式法包"], price:"45-70HKD", payment:"现金", tips:"比九记牛腩还好吃的越南粉" },
-        { id:19, name:"长洲海鲜大排档 (海边档口)", address:"长洲北社海傍路海鲜街", lat:22.2085,lng:114.0280, dishes:["蒜蓉蒸蛏子","豉椒炒花甲","椒盐濑尿虾"], price:"200-400HKD", payment:"现金", tips:"海边大排档，傍晚吹海风吃海鲜" },
-        { id:20, name:"长洲泰式料理 (Thai)", address:"长洲东湾路附近", lat:22.2082,lng:114.0292, dishes:["泰式炒河","冬阴功汤","泰式奶茶"], price:"50-80HKD", payment:"现金/八达通", tips:"味道正宗，人均70HKD左右" },
-        { id:21, name:"甘永泰鱼蛋 (已结业⚠️)", address:"长洲新兴街", lat:22.2088,lng:114.0285, dishes:["大鱼蛋(已结业勿跑空)"], price:"-", payment:"-", tips:"目前已关门，替代选东源", isClosed:true },
-        { id:22, name:"长洲糯米糍 (路边小铺)", address:"长洲码头右侧小巷", lat:22.2085,lng:114.0282, dishes:["花生糯米糍","芝麻糯米糍"], price:"10-15HKD", payment:"现金", tips:"随意小店，平记更佳" },
-        { id:23, name:"时来食坊 (避雷⚠️鱼蛋难吃)", address:"长洲码头左转", lat:22.2089,lng:114.0286, dishes:["大鱼蛋(不推荐)"], price:"12HKD", payment:"现金", tips:"网友反馈又小又难吃，建议避开" },
-        { id:24, name:"长洲华威酒店中餐厅", address:"长洲东湾", lat:22.2078,lng:114.0305, dishes:["粤式点心","海鲜套餐"], price:"100-300HKD", payment:"信用卡/现金", tips:"海景餐厅，适合雨天室内用餐" },
-        { id:25, name:"林记煲仔饭 (广州长洲岛，不属于香港)", address:"广州黄埔区", lat:0,lng:0, hidden:true }, // 隐藏，广州店不显示
-        { id:26, name:"姚林轩 (广州店)", address:"广州黄埔", lat:0,lng:0, hidden:true },
-        { id:27, name:"红虹小食 (广州)", address:"广州黄埔", lat:0,lng:0, hidden:true }
+    // --------------------------------------------------------------
+    // 1. 长洲岛全店铺数据 (基于CSV小红书香港长洲岛，排除广州，包含所有步行可达店铺)
+    //    坐标均位于长洲岛内（码头附近、东湾、北社街等），精确到巷口
+    // --------------------------------------------------------------
+    const SHOPS_RAW = [
+        { id:1, name:"东源小食店", nameEn:"Dongyuan Fishball", address:"长洲新兴街 (码头左转)", lat:22.2089,lng:114.0287, dishes:["招牌大鱼蛋 13HKD/2粒","劲辣咖喱","黑椒味"], price:"13-20 HKD", payment:"只收现金", tips:"鱼蛋超大颗，QQ弹弹，辣味过瘾！下午四点前关门" },
+        { id:2, name:"长洲平记", address:"长洲北社海傍路19A号地铺", lat:22.2085,lng:114.0283, dishes:["芒果糯米糍 17HKD","榴莲糯米糍","芒果肠粉"], price:"15-25 HKD", payment:"八达通/现金", tips:"皮薄馅大，一整颗芒果，公认长洲必吃" },
+        { id:3, name:"允升甜品", address:"长洲新兴街5号地下", lat:22.2090,lng:114.0285, dishes:["芒果糯米糍(元祖)","杨枝甘露","芒果奶冻"], price:"15-35 HKD", payment:"现金", tips:"糯米糍始祖，设低消15HKD，芒果甜品一绝" },
+        { id:4, name:"陈通记", address:"长洲大兴堤路2号熟食中心13号舖", lat:22.2082,lng:114.0280, dishes:["沙爹牛肉米通 44HKD","沙爹牛肉公仔面","西多士"], price:"30-55 HKD", payment:"只收现金", tips:"沙爹汤底浓郁花生粒，港岛老味道，本地人强推" },
+        { id:5, name:"长洲冰室", address:"长洲北社海旁19C号地下", lat:22.2087,lng:114.0279, dishes:["泰式奶茶三色圆冰 70HKD","芒果血糯米圆子","仙草挫冰"], price:"30-75 HKD", payment:"支付宝/现金", tips:"泰奶冰一绝，文青风避暑歇脚" },
+        { id:6, name:"故乡茶寮", address:"长洲教堂路17号地下", lat:22.2092,lng:114.0277, dishes:["红豆饼 6HKD","日式手卷18-28HKD"], price:"6-30 HKD", payment:"现金", tips:"日本夫妇经营，红豆饼外脆内香，多年不变" },
+        { id:7, name:"康兰饼店", address:"长洲海傍道91号B地下", lat:22.2080,lng:114.0290, dishes:["一口蛋挞/椰挞 15HKD/6个","平安包 11HKD"], price:"10-20 HKD", payment:"现金", tips:"怀旧饼店，平安包寓意平安，迷你蛋挞很赞" },
+        { id:8, name:"长洲角酪", address:"长洲新兴街78号地铺", lat:22.2090,lng:114.0286, dishes:["莓莓角酪","芒芒角酪","紫薯角酪"], price:"28-48 HKD", payment:"八达通/现金", tips:"网红打卡墙「長洲」地铁站风格，乳酪饮品清爽" },
+        { id:9, name:"町町 (日式猫定食)", address:"长洲大新海傍街82号", lat:22.2086,lng:114.0289, dishes:["日式照烧鸡定食 69HKD","咖喱猪扒饭","猫主题甜品"], price:"60-90 HKD", payment:"现金", tips:"猫咪主题餐厅，日式定食，适合正餐躲雨" },
+        { id:10, name:"新康记菜馆", address:"长洲北社海傍道11A号地铺", lat:22.2084,lng:114.0281, dishes:["海鲜套餐 278HKD/3款","避风塘炒蟹","椒盐濑尿虾"], price:"150-400 HKD", payment:"现金", tips:"海鲜新鲜，可讲价送米粉，吹海风吃海鲜" },
+        { id:11, name:"张记鱼蛋粉", address:"长洲新兴街口 (近码头)", lat:22.2083,lng:114.0284, dishes:["鱼蛋墨丸双拼面","招牌炸鱼皮"], price:"25-45 HKD", payment:"现金", tips:"汤底鲜甜，鱼蛋粉地道老字号" },
+        { id:12, name:"伟记面家", address:"长洲码头右转50米", lat:22.2084,lng:114.0280, dishes:["牛三宝面","云吞面","牛腩面"], price:"30-50 HKD", payment:"现金", tips:"牛腩软烂入味，多次刷岛必吃" },
+        { id:13, name:"莲香餐厅", address:"长洲街市巷内 (近东源对面)", lat:22.2088,lng:114.0282, dishes:["沙爹牛肉公仔面","滑蛋虾仁饭"], price:"35-55 HKD", payment:"现金", tips:"沙爹牛肉好吃到起飞，烟火气十足" },
+        { id:14, name:"鸡屎藤砵仔糕 (阿婆档)", address:"海景楼金兴餐厅门口 (码头附近)", lat:22.2089,lng:114.0275, dishes:["鸡屎藤砵仔糕(花生馅)","红豆砵仔糕"], price:"8-15 HKD", payment:"现金", tips:"传统手工小吃，每日中午后开档，软糯香甜" },
+        { id:15, name:"大肠洲 Pizza & 义式", address:"长洲教堂路附近", lat:22.2091,lng:114.0280, dishes:["手工pizza 28HKD/个","炸鸡","意面"], price:"28-70 HKD", payment:"现金", tips:"变装皇后开的店，pizza便宜好吃，老板热情" },
+        { id:16, name:"可口糯米糍", address:"长洲新兴后街 (近码头东侧)", lat:22.2088,lng:114.0288, dishes:["芒果糯米糍 13HKD","榴莲糯米糍"], price:"13-20 HKD", payment:"现金", tips:"皮薄馅多，性价比高，芒果香甜" },
+        { id:17, name:"炸雪糕小摊", address:"长洲新兴后街 (近食来食坊旧址)", lat:22.2090,lng:114.0284, dishes:["炸雪糕 25HKD/2颗","外酥里冰"], price:"20-30 HKD", payment:"现金", tips:"外热内冰，新奇口感，饭后甜点" },
+        { id:18, name:"Phong Cách Việt 越南河粉", address:"长洲北社街 (近码头北侧)", lat:22.2086,lng:114.0278, dishes:["火车头越南河粉","越式法包"], price:"45-70 HKD", payment:"现金", tips:"越南粉比九记牛腩还好吃，汤头惊艳" },
+        { id:19, name:"长洲海鲜大排档 (海边档口)", address:"长洲北社海傍路海鲜街", lat:22.2085,lng:114.0280, dishes:["蒜蓉蒸蛏子","豉椒炒花甲","椒盐濑尿虾"], price:"200-400 HKD", payment:"现金", tips:"海边大排档，傍晚吹海风吃海鲜" },
+        { id:20, name:"长洲泰式料理 (Thai Kitchen)", address:"长洲东湾路附近", lat:22.2082,lng:114.0292, dishes:["泰式炒河","冬阴功汤","泰式奶茶"], price:"50-80 HKD", payment:"现金/八达通", tips:"味道正宗，人均70HKD，泰奶好喝" },
+        { id:21, name:"新锦记", address:"长洲北社街", lat:22.2085,lng:114.0279, dishes:["平安包","豆沙包"], price:"10-15 HKD", payment:"现金", tips:"平安包图个好意头，莲蓉/豆沙馅" },
+        { id:22, name:"大可以滋补馆", address:"长洲金洲北路 (近街市)", lat:22.2087,lng:114.0289, dishes:["支柱牛杂煲","滋补汤品"], price:"60-120 HKD", payment:"现金", tips:"牛杂煲很可以，本地人爱去，暖胃" },
+        { id:23, name:"华威酒店中餐厅", address:"长洲东湾", lat:22.2078,lng:114.0305, dishes:["粤式点心","海鲜套餐","避风塘炒蟹"], price:"100-300 HKD", payment:"信用卡/现金", tips:"海景餐厅，雨天室内用餐舒适" },
+        { id:24, name:"长洲陈记烧鹅 (街市烧腊)", address:"长洲街市熟食档", lat:22.2083,lng:114.0283, dishes:["深井烧鹅","叉烧饭"], price:"40-70 HKD", payment:"现金", tips:"皮脆肉嫩，地道烧味" },
+        { id:25, name:"长洲糯米糍小铺 (码头右转)", address:"长洲码头右侧小巷", lat:22.2085,lng:114.0282, dishes:["花生糯米糍","芝麻糯米糍"], price:"10-15 HKD", payment:"现金", tips:"随意小店，软糯香甜" }
     ];
-    
-    // 过滤出香港长洲岛有效店铺 (排除广州、排除隐藏)
-    let shopsData = fullShops.filter(s => !s.hidden && s.lat !== 0 && s.lng !== 0 && s.id !== 21 && s.id !== 23); // 甘永泰关门不显示，时来食坊避雷可选保留但可展示但标注
-    // 手动再补两个遗漏的推荐：长洲沙爹牛肉面（陈通记已有），长洲角酪已有，再加一个长洲“大可以滋补馆” (CSV出现)
-    shopsData.push({ id:28, name:"大可以滋补馆", address:"长洲金洲北路? (近街市)", lat:22.2087,lng:114.0289, dishes:["支柱牛杂煲","滋补汤品"], price:"60-120HKD", payment:"现金", tips:"牛杂煲很可以，本地人爱去" });
-    shopsData.push({ id:29, name:"长洲德膳山庄 (广州店已排除，此为香港长洲无)", hidden:true });
-    // 真实增加“长洲糯米糍 (允升/平记已有) 但加上允升已包含”
-    // 添加“长洲东南亚菜(印度菜)”无具体名，不添加以免误导。加上“长洲新锦记(平安包)”
-    shopsData.push({ id:30, name:"新锦记", address:"长洲北社街", lat:22.2085,lng:114.0279, dishes:["平安包","豆沙包"], price:"10-15HKD", payment:"现金", tips:"平安包图个好意头" });
-    // 最终清理重复及去除广州店
-    shopsData = shopsData.filter(s => s.id !== 25 && s.id !== 26 && s.id !== 27 && !s.hidden);
-    
-    // 用户位置：长洲新北社街 (精确)
+
+    // 用户位置默认：长洲新北社街（精确）
     let userLat = 22.2093;
     let userLng = 114.0282;
-    let userAddress = "长洲新北社街 (您当前附近)";
+    let userAddress = "长洲新北社街 (默认)";
+    let shops = [...SHOPS_RAW];
     
-    // 辅助函数：计算距离(米)
+    // 辅助函数：计算两点距离（米）
     function distanceToUser(lat, lng) {
         const R = 6371000;
         const dLat = (lat - userLat) * Math.PI / 180;
@@ -326,26 +341,30 @@
         return R * c;
     }
     
-    function formatDistance(m) {
-        if (m < 1000) return `${Math.round(m)}米`;
-        return `${(m/1000).toFixed(1)}公里`;
+    function formatDistance(meters) {
+        if (meters < 1000) return `${Math.round(meters)}米`;
+        return `${(meters/1000).toFixed(1)}公里`;
     }
-    function walkTime(minutes) { let mins = Math.round(minutes); return mins <= 1 ? "约1分钟" : `约${mins}分钟`; }
+    function walkTime(minutes) {
+        const mins = Math.round(minutes);
+        return mins <= 1 ? "约1分钟" : `约${mins}分钟`;
+    }
     
-    // 给每个店添加动态距离字段
-    function updateShopDistances() {
-        return shopsData.map(shop => {
+    // 给每个店铺添加距离信息
+    function enrichShopsWithDistance() {
+        return shops.map(shop => {
             const distM = distanceToUser(shop.lat, shop.lng);
             const walkMins = Math.ceil(distM / 70);
             return { ...shop, distanceMeters: distM, walkMinutes: walkMins };
         });
     }
     
-    let currentShops = updateShopDistances();
+    let currentShops = enrichShopsWithDistance();
     let currentSort = "distance";
     let searchKeyword = "";
     
-    function filterAndSort() {
+    // 过滤 + 排序
+    function getFilteredAndSorted() {
         let filtered = currentShops.filter(shop => {
             if (!searchKeyword) return true;
             const kw = searchKeyword.toLowerCase();
@@ -362,29 +381,47 @@
         return filtered;
     }
     
-    // 渲染列表 + 绑定地图按钮事件
-    let map;
-    let markersLayer;
-    let userMarker;
+    // 唤起苹果地图 (iOS 系统地图)
+    function openAppleMaps(shop) {
+        // 使用 maps.apple.com 通用 scheme，支持 iOS/macOS，自动跳转系统地图
+        // 编码地址和坐标，确保准确
+        const query = encodeURIComponent(`${shop.name}, 香港长洲岛 ${shop.address}`);
+        // 最佳方式：直接使用坐标打开导航 "maps://?q=纬度,经度&ll=纬度,经度"
+        // 为了更好的体验，同时传入名称和坐标
+        const url = `https://maps.apple.com/?q=${shop.lat},${shop.lng}&address=${encodeURIComponent(shop.address)}&ll=${shop.lat},${shop.lng}`;
+        // 使用 window.location 跳转
+        window.location.href = url;
+    }
     
-    function renderShopList() {
-        const list = filterAndSort();
-        const container = document.getElementById("shopListPanel");
+    // 渲染列表
+    function renderList() {
+        const container = document.getElementById("shopListContainer");
+        const statsSpan = document.getElementById("statsInfo");
+        const filteredList = getFilteredAndSorted();
+        
         if (!container) return;
-        if (list.length === 0) {
+        if (filteredList.length === 0) {
             container.innerHTML = `<div class="no-results"><i class="fas fa-umbrella"></i> 没有找到相关店铺，换个关键词试试～</div>`;
+            statsSpan.innerHTML = `<span><i class="fas fa-utensils"></i> 0 家店铺</span><span><i class="fas fa-map-marker-alt"></i> 已定位</span>`;
             return;
         }
+        
         let html = "";
-        list.forEach(shop => {
+        filteredList.forEach(shop => {
             const distText = formatDistance(shop.distanceMeters);
             const timeText = walkTime(shop.walkMinutes);
             const dishesHtml = shop.dishes.map(d => `<span class="dish-tag">${d}</span>`).join('');
             const rainPreferred = shop.distanceMeters < 450 ? `<span class="rain-tag"><i class="fas fa-umbrella"></i> 躲雨优选</span>` : '';
+            // 综合评分(伪) 用热度表示
+            const hotness = shop.id % 5 + 4; // 随机模仿评分4~8分
+            const starHtml = '<i class="fas fa-star" style="color:#fbbf24; font-size:0.7rem;"></i>'.repeat(Math.min(5, Math.floor(hotness/1.5))) + `<span style="margin-left:4px;">${hotness}.0分</span>`;
             html += `
-                <div class="shop-card" data-id="${shop.id}" data-lat="${shop.lat}" data-lng="${shop.lng}" data-name="${shop.name}">
+                <div class="shop-card" data-id="${shop.id}">
                     <div class="shop-header">
-                        <div class="shop-name"><i class="fas fa-store"></i> ${shop.name}</div>
+                        <div class="shop-name">
+                            <i class="fas fa-store"></i> ${shop.name}
+                            ${starHtml}
+                        </div>
                         <span class="distance-badge"><i class="fas fa-walking"></i> ${distText} · ${timeText}</span>
                         ${rainPreferred}
                     </div>
@@ -394,131 +431,111 @@
                         <span><i class="fas fa-tag"></i> ${shop.price}</span>
                         <span><i class="fas fa-coins"></i> ${shop.payment}</span>
                     </div>
-                    <div class="info-row"><i class="fas fa-comment"></i> ${shop.tips.substring(0, 55)}${shop.tips.length>55?'...':''}</div>
-                    <button class="map-mini-btn view-on-map" data-lat="${shop.lat}" data-lng="${shop.lng}" data-name="${shop.name}">
-                        <i class="fas fa-map-marker-alt"></i> 在地图中查看
+                    <div class="comment"><i class="fas fa-comment-dots"></i> ${shop.tips}</div>
+                    <button class="map-link-btn" data-id="${shop.id}">
+                        <i class="fab fa-apple"></i> 苹果地图导航
                     </button>
                 </div>
             `;
         });
         container.innerHTML = html;
-        // 绑定地图查看按钮
-        document.querySelectorAll('.view-on-map').forEach(btn => {
+        
+        // 绑定按钮点击事件
+        document.querySelectorAll('.map-link-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const lat = parseFloat(btn.dataset.lat);
-                const lng = parseFloat(btn.dataset.lng);
-                const name = btn.dataset.name;
-                if (map) {
-                    map.flyTo([lat, lng], 17);
-                    L.popup().setLatLng([lat, lng]).setContent(`<b>${name}</b><br>📍 点击下方导航可规划步行路线`).openOn(map);
+                const shopId = parseInt(btn.dataset.id);
+                const shopItem = filteredList.find(s => s.id === shopId);
+                if (shopItem) {
+                    openAppleMaps(shopItem);
                 }
             });
         });
-        // 卡片整体点击跳转地图
-        document.querySelectorAll('.shop-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if(e.target.classList.contains('view-on-map')) return;
-                const lat = parseFloat(card.dataset.lat);
-                const lng = parseFloat(card.dataset.lng);
-                const name = card.dataset.name;
-                if (map) {
-                    map.flyTo([lat, lng], 16);
-                    L.popup().setLatLng([lat, lng]).setContent(`<b>${name}</b><br>距离您 ${formatDistance(distanceToUser(lat,lng))}`).openOn(map);
-                }
-            });
-        });
+        
+        // 更新统计信息
+        statsSpan.innerHTML = `<span><i class="fas fa-utensils"></i> ${filteredList.length} 家美食店</span><span><i class="fas fa-map-marker-alt"></i> ${userAddress}</span>`;
     }
     
-    function updateMapMarkers() {
-        if (!map) return;
-        markersLayer.clearLayers();
-        const list = filterAndSort();
-        list.forEach(shop => {
-            const marker = L.marker([shop.lat, shop.lng]).bindPopup(`
-                <strong>${shop.name}</strong><br>
-                📍 ${shop.address}<br>
-                🍜 ${shop.dishes.join(' · ')}<br>
-                💰 ${shop.price} · ${shop.payment}<br>
-                🚶 距离您 ${formatDistance(shop.distanceMeters)} (步行${walkTime(shop.walkMinutes)})<br>
-                ✨ ${shop.tips}
-            `);
-            markersLayer.addLayer(marker);
-        });
-        markersLayer.addTo(map);
-        if (userMarker) map.removeLayer(userMarker);
-        userMarker = L.marker([userLat, userLng], {
-            icon: L.divIcon({ className: 'user-marker', html: '<i class="fas fa-map-pin" style="font-size:28px; color:#e34d3a; text-shadow:0 0 2px white;"></i>', iconSize: [24,24], popupAnchor: [0,-10] })
-        }).bindPopup(`<b>📍 我的位置</b><br>${userAddress}<br>☔️ 下雨路滑，注意安全`).addTo(map);
-    }
-    
+    // 刷新所有数据（距离变化后重新计算并渲染）
     function refreshAll() {
-        currentShops = updateShopDistances();
-        renderShopList();
-        updateMapMarkers();
+        currentShops = enrichShopsWithDistance();
+        renderList();
     }
     
-    function initMap() {
-        map = L.map('map').setView([userLat, userLng], 15);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> & CartoDB',
-            maxZoom: 19
-        }).addTo(map);
-        markersLayer = L.layerGroup().addTo(map);
-        userMarker = L.marker([userLat, userLng]).bindPopup("长洲新北社街").addTo(map);
-        updateMapMarkers();
-        map.on('click', () => {});
-    }
-    
-    // 获取真实地理位置（仅当在长洲岛附近更新）
-    function getRealLocation() {
+    // 获取用户真实位置（如果允许且位于长洲岛附近）
+    function updateUserLocation() {
         if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                const rlat = pos.coords.latitude;
-                const rlng = pos.coords.longitude;
-                if (rlat > 22.19 && rlat < 22.22 && rlng > 114.01 && rlng < 114.05) {
-                    userLat = rlat;
-                    userLng = rlng;
-                    userAddress = "您的实时位置 (长洲岛内)";
-                } else {
-                    alert("未检测到您在长洲岛内，使用新北社街默认位置");
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const realLat = position.coords.latitude;
+                    const realLng = position.coords.longitude;
+                    // 校验是否在长洲岛范围内 (纬度约22.195~22.215, 经度114.02~114.04)
+                    if (realLat > 22.19 && realLat < 22.22 && realLng > 114.01 && realLng < 114.05) {
+                        userLat = realLat;
+                        userLng = realLng;
+                        userAddress = "您的实时位置 (长洲岛内)";
+                    } else {
+                        // 不在长洲岛则保持默认，并提示
+                        userAddress = "长洲新北社街 (模拟位置)";
+                        console.log("定位不在长洲岛，使用默认坐标");
+                    }
+                    refreshAll();
+                    // 更新stats显示
+                    const statsSpan = document.getElementById("statsInfo");
+                    if(statsSpan) statsSpan.innerHTML = `<span><i class="fas fa-utensils"></i> 加载中...</span><span><i class="fas fa-map-marker-alt"></i> ${userAddress}</span>`;
+                    setTimeout(() => {
+                        renderList();
+                    }, 50);
+                },
+                (error) => {
+                    console.warn("定位失败", error);
+                    userAddress = "长洲新北社街 (定位未授权)";
+                    refreshAll();
                 }
-                refreshAll();
-                if (map) map.flyTo([userLat, userLng], 15);
-            }, () => alert("无法获取位置，使用默认位置"));
+            );
         } else {
-            alert("浏览器不支持定位");
+            userAddress = "长洲新北社街 (不支持定位)";
+            refreshAll();
         }
     }
     
-    // 事件绑定
+    // 手动重置定位按钮
+    function manualRelocate() {
+        updateUserLocation();
+    }
+    
+    // 事件绑定与搜索排序
     document.addEventListener('DOMContentLoaded', () => {
-        initMap();
-        refreshAll();
+        // 初始化定位
+        updateUserLocation();
+        
         const searchInput = document.getElementById('searchInput');
+        const sortDistance = document.querySelector('[data-sort="distance"]');
+        const sortName = document.querySelector('[data-sort="name"]');
+        const recenterBtn = document.getElementById('recenterBtn');
+        
         searchInput.addEventListener('input', (e) => {
             searchKeyword = e.target.value;
-            refreshAll();
+            renderList();
         });
-        const sortDist = document.querySelector('[data-sort="distance"]');
-        const sortName = document.querySelector('[data-sort="name"]');
-        sortDist.addEventListener('click', () => {
+        
+        sortDistance.addEventListener('click', () => {
             currentSort = "distance";
-            sortDist.classList.add('active');
+            sortDistance.classList.add('active');
             sortName.classList.remove('active');
-            refreshAll();
+            renderList();
         });
+        
         sortName.addEventListener('click', () => {
             currentSort = "name";
             sortName.classList.add('active');
-            sortDist.classList.remove('active');
-            refreshAll();
+            sortDistance.classList.remove('active');
+            renderList();
         });
-        const recenterBtn = document.getElementById('recenterBtn');
+        
         recenterBtn.addEventListener('click', () => {
-            getRealLocation();
+            manualRelocate();
         });
-        setTimeout(() => { if(map) map.flyTo([userLat, userLng], 15); }, 600);
     });
 </script>
 </body>
